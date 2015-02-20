@@ -18,11 +18,14 @@ class Flight;
 // TLD Includes.
 #include "tld/TLD.h"
 
-class State
-{
+class State {
 public:
-	State(void){};
-	virtual State* Do(StateData* stateData){ };
+	State(void) {
+	}
+	;
+	virtual State* Do(StateData* stateData) {
+	}
+	;
 
 	// Colour definitions.
 	static const CvScalar RED;
@@ -35,37 +38,32 @@ public:
 	static const CvScalar BLACK;
 };
 
-class StartState : public State
-{
+class StartState: public State {
 public:
 	StartState(void);
 	~StartState(void);
 	State* Do(StateData* stateData);
 };
 
-class StateSelecting : public State
-{
+class StateSelecting: public State {
 public:
 	StateSelecting(void);
 	~StateSelecting(void);
 	State* Do(StateData* stateData);
 };
 
-class StateInitializing : public State
-{
+class StateInitializing: public State {
 public:
 	StateInitializing(void);
 	~StateInitializing(void);
 	State* Do(StateData* stateData);
 };
 
-class StateTracking : public State
-{
+class StateTracking: public State {
 public:
 	StateTracking(void);
 	~StateTracking(void);
 	State* Do(StateData* stateData);
 };
-
 
 #endif

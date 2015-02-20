@@ -59,7 +59,7 @@ public:
 			string& importModel) :
 			imageTransport(node) {
 
-		switch(angle){
+		switch (angle) {
 		case FRONT:
 			ROS_INFO("front");
 			this->flight = new FrontTrackFlight(this->node);

@@ -1,16 +1,16 @@
 /************************************************************************
-  			Blob.h
-  			
-FUNCIONALITAT: Definició de la classe CBlob
-AUTOR: Inspecta S.L.
-MODIFICACIONS (Modificació, Autor, Data):
+ Blob.h
+ 
+ FUNCIONALITAT: Definiciï¿½ de la classe CBlob
+ AUTOR: Inspecta S.L.
+ MODIFICACIONS (Modificaciï¿½, Autor, Data):
 
-FUNCTIONALITY: Definition of the CBlob class and some helper classes to perform
-			   some calculations on it
-AUTHOR: Inspecta S.L.
-MODIFICATIONS (Modification, Author, Date):
+ FUNCTIONALITY: Definition of the CBlob class and some helper classes to perform
+ some calculations on it
+ AUTHOR: Inspecta S.L.
+ MODIFICATIONS (Modification, Author, Date):
 
-**************************************************************************/
+ **************************************************************************/
 
 //! Disable warnings referred to 255 character truncation for the std:map
 #pragma warning( disable : 4786 ) 
@@ -22,57 +22,50 @@ MODIFICATIONS (Modification, Author, Date):
 #include "BlobLibraryConfiguration.h"
 #include "BlobContour.h"
 
-
 #ifdef BLOB_OBJECT_FACTORY
-	//! Object factory pattern implementation
-	#include "..\inspecta\DesignPatterns\ObjectFactory.h"
+//! Object factory pattern implementation
+#include "..\inspecta\DesignPatterns\ObjectFactory.h"
 #endif
-
 
 //! Type of labelled images
 typedef unsigned int t_labelType;
 
-
 //! Blob class
-class CBlob
-{
+class CBlob {
 	typedef std::list<CBlobContour> t_contourList;
 
 public:
 	CBlob();
-	CBlob( t_labelType id, CvPoint startPoint, CvSize originalImageSize );
+	CBlob(t_labelType id, CvPoint startPoint, CvSize originalImageSize);
 	~CBlob();
 
 	//! Copy constructor
-	CBlob( const CBlob &src );
-	CBlob( const CBlob *src );
+	CBlob(const CBlob &src);
+	CBlob(const CBlob *src);
 
-	//! Operador d'assignació
+	//! Operador d'assignaciï¿½
 	//! Assigment operator
-	CBlob& operator=(const CBlob &src );
-	
+	CBlob& operator=(const CBlob &src);
+
 	//! Adds a new internal contour to the blob
-	void AddInternalContour( const CBlobContour &newContour );
-	
+	void AddInternalContour(const CBlobContour &newContour);
+
 	//! Retrieves contour in Freeman's chain code
-	CBlobContour *GetExternalContour()
-	{
+	CBlobContour *GetExternalContour() {
 		return &m_externalContour;
 	}
 
 	//! Retrieves blob storage
-	CvMemStorage *GetStorage()
-	{
+	CvMemStorage *GetStorage() {
 		return m_storage;
 	}
 
 	//! Get label ID
-	t_labelType GetID()
-	{
+	t_labelType GetID() {
 		return m_id;
 	}
 	//! > 0 for extern blobs, 0 if not
-	int	  Exterior( IplImage *mask, bool xBorder = true, bool yBorder = true );
+	int Exterior(IplImage *mask, bool xBorder = true, bool yBorder = true);
 	//! Compute blob's area
 	double Area();
 	//! Compute blob's perimeter
@@ -81,15 +74,16 @@ public:
 	double Moment(int p, int q);
 
 	//! Compute extern perimeter 
-	double ExternPerimeter( IplImage *mask, bool xBorder  = true, bool yBorder = true );
-	
+	double ExternPerimeter(IplImage *mask, bool xBorder = true, bool yBorder =
+			true);
+
 	//! Get mean grey color
-	double Mean( IplImage *image );
+	double Mean(IplImage *image);
 
 	//! Get standard deviation grey color
-	double StdDev( IplImage *image );
+	double StdDev(IplImage *image);
 
-	//! Indica si el blob està buit ( no té cap info associada )
+	//! Indica si el blob estï¿½ buit ( no tï¿½ cap info associada )
 	//! Shows if the blob has associated information
 	bool IsEmpty();
 
@@ -99,10 +93,11 @@ public:
 
 	//! Pinta l'interior d'un blob d'un color determinat
 	//! Paints the blob in an image
-	void FillBlob( IplImage *imatge, CvScalar color, int offsetX = 0, int offsetY = 0 );
+	void FillBlob(IplImage *imatge, CvScalar color, int offsetX = 0,
+			int offsetY = 0);
 
 	//! Join a blob to current one (add's contour
-	void JoinBlob( CBlob *blob );
+	void JoinBlob(CBlob *blob);
 
 	//! Get bounding box
 	CvRect GetBoundingBox();
@@ -110,33 +105,28 @@ public:
 	CvBox2D GetEllipse();
 
 	//! Minimun X	
-	double MinX()
-	{
+	double MinX() {
 		return GetBoundingBox().x;
 	}
 	//! Minimun Y
-	double MinY()
-	{
+	double MinY() {
 		return GetBoundingBox().y;
 	}
 	//! Maximun X
-	double MaxX()
-	{
+	double MaxX() {
 		return GetBoundingBox().x + GetBoundingBox().width;
 	}
 	//! Maximun Y
-	double MaxY()
-	{
+	double MaxY() {
 		return GetBoundingBox().y + GetBoundingBox().height;
 	}
 private:
-	
+
 	//! Deallocates all contours
 	void ClearContours();
 	//////////////////////////////////////////////////////////////////////////
 	// Blob contours
 	//////////////////////////////////////////////////////////////////////////
-
 
 	//! Contour storage memory
 	CvMemStorage *m_storage;
@@ -148,7 +138,7 @@ private:
 	//////////////////////////////////////////////////////////////////////////
 	// Blob features
 	//////////////////////////////////////////////////////////////////////////
-	
+
 	//! Label number
 	t_labelType m_id;
 	//! Area

@@ -13,8 +13,7 @@
 using namespace std;
 using namespace cv;
 
-class VideoImageProcess: public ImageProcess
-{
+class VideoImageProcess: public ImageProcess {
 public:
 	// VideoImageProcess class constructor.
 	VideoImageProcess(Flight* flight, string videoName, string& importModel);

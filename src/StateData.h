@@ -14,11 +14,11 @@ using namespace std;
 class Flight;
 class TLD;
 
-class StateData
-{
+class StateData {
 public:
 	// StateData class constructor.
-	StateData(tld::TLD& tld, const char* windowName, Flight& flight, bool& importedModel, bool cameraOnly);
+	StateData(tld::TLD& tld, const char* windowName, Flight& flight,
+			bool& importedModel, bool cameraOnly);
 
 	// StateData class destructor.
 	~StateData();

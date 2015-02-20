@@ -21,8 +21,7 @@ using namespace geometry_msgs;
 class Pid;
 class StateData;
 
-class Flight
-{
+class Flight {
 public:
 	// Flight class constructor, takes in the node.
 	Flight(NodeHandle& node);

@@ -23,8 +23,7 @@ using namespace cv_bridge;
 class StateData;
 
 // CameraImageProcess class that processes images from the drone.
-class CameraImageProcess: public ImageProcess
-{
+class CameraImageProcess: public ImageProcess {
 public:
 	// Default constructor for camera image processing.
 	CameraImageProcess(Flight* flight, bool record, string& importModel);

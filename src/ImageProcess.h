@@ -27,8 +27,7 @@ using namespace ros;
 using namespace tld;
 
 // ImageProcess base class.
-class ImageProcess
-{
+class ImageProcess {
 public:
 	// Constructor for the ImageProcess class.
 	ImageProcess(Flight* flight, string& importModel, bool cameraOnly);

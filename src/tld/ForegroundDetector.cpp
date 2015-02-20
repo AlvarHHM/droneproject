@@ -1,21 +1,21 @@
 /*  Copyright 2011 AIT Austrian Institute of Technology
-*
-*   This file is part of OpenTLD.
-*
-*   OpenTLD is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*    the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   OpenTLD is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with OpenTLD.  If not, see <http://www.gnu.org/licenses/>.
-*
-*/
+ *
+ *   This file is part of OpenTLD.
+ *
+ *   OpenTLD is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   OpenTLD is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with OpenTLD.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 /*
  * ForegroundDetector.cpp
  *
@@ -29,57 +29,49 @@
 
 using namespace cv;
 
-namespace tld
-{
+namespace tld {
 
-ForegroundDetector::ForegroundDetector()
-{
-    fgThreshold = 16;
-    minBlobSize = 0;
+ForegroundDetector::ForegroundDetector() {
+	fgThreshold = 16;
+	minBlobSize = 0;
 }
 
-ForegroundDetector::~ForegroundDetector()
-{
+ForegroundDetector::~ForegroundDetector() {
 }
 
-void ForegroundDetector::release()
-{
+void ForegroundDetector::release() {
 }
 
-void ForegroundDetector::nextIteration(const Mat &img)
-{
-    if(bgImg.empty())
-    {
-        return;
-    }
+void ForegroundDetector::nextIteration(const Mat &img) {
+	if (bgImg.empty()) {
+		return;
+	}
 
-    Mat absImg = Mat(img.cols, img.rows, img.type());
-    Mat threshImg = Mat(img.cols, img.rows, img.type());
+	Mat absImg = Mat(img.cols, img.rows, img.type());
+	Mat threshImg = Mat(img.cols, img.rows, img.type());
 
-    absdiff(bgImg, img, absImg);
-    threshold(absImg, threshImg, fgThreshold, 255, CV_THRESH_BINARY);
+	absdiff(bgImg, img, absImg);
+	threshold(absImg, threshImg, fgThreshold, 255, CV_THRESH_BINARY);
 
-    IplImage im = (IplImage)threshImg;
-    CBlobResult blobss = CBlobResult(&im, NULL, 1);
-    CBlobResult blobs = CBlobResult(&im, NULL, 0);
+	IplImage im = (IplImage) threshImg;
+	CBlobResult blobss = CBlobResult(&im, NULL, 1);
+	CBlobResult blobs = CBlobResult(&im, NULL, 0);
 
-    blobs.Filter(blobs, B_EXCLUDE, CBlobGetArea(), B_LESS, minBlobSize);
+	blobs.Filter(blobs, B_EXCLUDE, CBlobGetArea(), B_LESS, minBlobSize);
 
-    std::vector<Rect>* fgList = detectionResult->fgList;
-    fgList->clear();
+	std::vector<Rect>* fgList = detectionResult->fgList;
+	fgList->clear();
 
-    for(int i = 0; i < blobs.GetNumBlobs(); i++)
-    {
-        CBlob *blob = blobs.GetBlob(i);
-        CvRect rect = blob->GetBoundingBox();
-        fgList->push_back(rect);
-    }
+	for (int i = 0; i < blobs.GetNumBlobs(); i++) {
+		CBlob *blob = blobs.GetBlob(i);
+		CvRect rect = blob->GetBoundingBox();
+		fgList->push_back(rect);
+	}
 
 }
 
-bool ForegroundDetector::isActive()
-{
-    return !bgImg.empty();
+bool ForegroundDetector::isActive() {
+	return !bgImg.empty();
 }
 
 } /* namespace tld */

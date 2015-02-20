@@ -3,8 +3,7 @@
 using namespace std;
 
 // Default constructor that takes in an offset, a constant proportional, a constant integral and a constant derivative.
-Pid::Pid(int offset, double kp, double ki, double kd)
-{
+Pid::Pid(int offset, double kp, double ki, double kd) {
 	// Initialize values.
 	this->kp = kp;
 	this->ki = ki;
@@ -20,14 +19,12 @@ Pid::Pid(int offset, double kp, double ki, double kd)
 }
 
 // Default destructor.
-Pid::~Pid(void)
-{
+Pid::~Pid(void) {
 	// Do nothing.
 }
 
 // Does the PID calculations from the value input.
-double Pid::ProcessPid(float currentValue, double time)
-{
+double Pid::ProcessPid(float currentValue, double time) {
 	//cout << "Calculating PID" << endl;
 
 	this->error = this->offset - currentValue;
@@ -39,7 +36,8 @@ double Pid::ProcessPid(float currentValue, double time)
 
 	this->derivative = (this->error - this->lastError) / time;
 
-	this->calculatedMovement = ((this->kp * this->error) + (this->ki * this->integral) + (this->kd * this->derivative));
+	this->calculatedMovement = ((this->kp * this->error)
+			+ (this->ki * this->integral) + (this->kd * this->derivative));
 
 	this->lastError = this->error;
 
@@ -54,46 +52,37 @@ double Pid::ProcessPid(float currentValue, double time)
 	 * The maximum value that can be sent is +1.0
 	 */
 	//cout << "Calculated movement: " << this->calculatedMovement << endl;
-
-	if (this->calculatedMovement >= 1.0)
-	{
+	if (this->calculatedMovement >= 1.0) {
 		return 1.0;
-	}
-	else if (this->calculatedMovement <= -1.0)
-	{
+	} else if (this->calculatedMovement <= -1.0) {
 		return -1.0;
-	}
-	else
-	{
+	} else {
 		return this->calculatedMovement;
 	}
 
 }
 
 // Allows re-setting of the offset.
-double Pid::ProcessPid(float currentValue, double time, int offset)
-{
+double Pid::ProcessPid(float currentValue, double time, int offset) {
 	this->offset = offset;
 	return this->ProcessPid(currentValue, time);
 }
 
 // Overload of the ProcessPid method that takes in an int.
-double Pid::ProcessPid(int currentValue, double time, int offset)
-{
+double Pid::ProcessPid(int currentValue, double time, int offset) {
 	this->offset = offset;
-	return this->ProcessPid((float)currentValue, time);
+	return this->ProcessPid((float) currentValue, time);
 }
 
 // Overload of the ProcessPid method that takes in a prop.
-double Pid::ProcessPid(int currentValue, double time, double pidChange)
-{
+double Pid::ProcessPid(int currentValue, double time, double pidChange) {
 	this->kp = pidChange;
 	this->ProcessPid(currentValue, time);
 }
 
 // Process the PID, change the value of the proportional.
-double Pid::ProcessPid(float currentValue, double time, int offset, double pidChange)
-{
+double Pid::ProcessPid(float currentValue, double time, int offset,
+		double pidChange) {
 	this->kp = pidChange;
 	this->ProcessPid(currentValue, time, offset);
 }

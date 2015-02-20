@@ -3,8 +3,7 @@
 
 #include <iostream>
 
-class Pid
-{
+class Pid {
 public:
 	// Default constructor that takes in an offset, a constant proportional, a constant integral and a constant derivative.
 	Pid(int offset, double kp, double ki, double kd);
@@ -25,7 +24,8 @@ public:
 	double ProcessPid(int currentValue, double time, double pidChange);
 
 	// Process the PID, change the value of the proportional.
-	double ProcessPid(float currentValue, double time, int offset, double pidChange);
+	double ProcessPid(float currentValue, double time, int offset,
+			double pidChange);
 
 private:
 	// Delta time.

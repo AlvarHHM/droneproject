@@ -7,7 +7,8 @@
 
 #include "BottomTrackFlight.h"
 
-BottomTrackFlight::BottomTrackFlight(NodeHandle& node) :  Flight(node){
+BottomTrackFlight::BottomTrackFlight(NodeHandle& node) :
+		Flight(node) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -114,15 +115,13 @@ void BottomTrackFlight::ProcessFlight(StateData& stateData) {
 				 * The distance from the drone to the object can be shown as how big the bounding box is in comparison
 				 * to either the original bounding box given or one specified by the user for a known object.
 				 */
-				double linearX = this->PidX->ProcessPid(
-						this->middleY,
+				double linearX = this->PidX->ProcessPid(this->middleY,
 						this->timeDifference);
 				//cout << "Movement X: " << linearX << endl;
 				this->LinearX(linearX);
 
-				double linearY = this->PidY->ProcessPid(
-										this->middleX,
-										this->timeDifference);
+				double linearY = this->PidY->ProcessPid(this->middleX,
+						this->timeDifference);
 				//cout << "Movement Y: " << linearY << endl;
 				this->LinearY(linearY);
 			} else {

@@ -1,7 +1,6 @@
 #ifndef BLOBCONTOUR_H_INCLUDED
 #define BLOBCONTOUR_H_INCLUDED
 
-
 #include "list"
 #include <opencv/cv.h>
 //#include "cxtypes.h"  //AO
@@ -14,57 +13,49 @@ typedef CvSeq* t_chainCodeList;
 //! Type of list of points
 typedef CvSeq* t_PointList;
 
-
 //! Max order of calculated moments
 #define MAX_MOMENTS_ORDER		3
 
-
 //! Blob contour class (in crack code)
-class CBlobContour
-{
+class CBlobContour {
 	friend class CBlob;
 	friend class CBlobProperties; //AO
-	
+
 public:
 	//! Constructors
 	CBlobContour();
-	CBlobContour(CvPoint startPoint, CvMemStorage *storage );
+	CBlobContour(CvPoint startPoint, CvMemStorage *storage);
 	//! Copy constructor
-	CBlobContour( CBlobContour *source );
+	CBlobContour(CBlobContour *source);
 
 	~CBlobContour();
 	//! Assigment operator
-	CBlobContour& operator=( const CBlobContour &source );
+	CBlobContour& operator=(const CBlobContour &source);
 
 	//! Add chain code to contour
 	void AddChainCode(t_chainCode code);
 
 	//! Return freeman chain coded contour
-	t_chainCodeList GetChainCode()
-	{
+	t_chainCodeList GetChainCode() {
 		return m_contour;
 	}
 
-	bool IsEmpty()
-	{
+	bool IsEmpty() {
 		return m_contour == NULL || m_contour->total == 0;
 	}
 
 	//! Return all contour points
 	t_chainCodeList GetContourPoints();
 
-protected:	
+protected:
 
-	CvPoint GetStartPoint() const
-	{
+	CvPoint GetStartPoint() const {
 		return m_startPoint;
 	}
 
 	//! Clears chain code contour
 	void ResetChainCode();
-	
 
-	
 	//! Computes area from contour
 	double GetArea();
 	//! Computes perimeter from contour
@@ -73,15 +64,13 @@ protected:
 	double GetMoment(int p, int q);
 
 	//! Crack code list
-	t_chainCodeList m_contour; 	
+	t_chainCodeList m_contour;
 
 private:
 	//! Starting point of the contour
 	CvPoint m_startPoint;
 	//! All points from the contour
 	t_PointList m_contourPoints;
-
-
 
 	//! Computed area from contour
 	double m_area;
@@ -95,5 +84,4 @@ private:
 };
 
 #endif	//!BLOBCONTOUR_H_INCLUDED
-
 

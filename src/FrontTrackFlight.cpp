@@ -7,8 +7,8 @@
 
 #include "FrontTrackFlight.h"
 
-
-FrontTrackFlight::FrontTrackFlight(NodeHandle& node) :  Flight(node){
+FrontTrackFlight::FrontTrackFlight(NodeHandle& node) :
+		Flight(node) {
 	// TODO Auto-generated constructor stub
 
 }

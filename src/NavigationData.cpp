@@ -4,17 +4,19 @@ using namespace std;
 using namespace cv;
 
 // NavigationData class constructor, holds the navigational data from the drone.
-NavigationData::NavigationData(void)
-{
+NavigationData::NavigationData(void) {
 
 	this->StatusWindow = "Status Window";
 	namedWindow(this->StatusWindow, WINDOW_AUTOSIZE);
 
 	// TODO: Make this a relative path.
-	this->statusBackground = imread("/home/ardrone/ros_workspace/sandbox/drone_project/src/background.jpg", CV_LOAD_IMAGE_COLOR);
+	this->statusBackground =
+			imread(
+					"/home/ardrone/ros_workspace/sandbox/drone_project/src/background.jpg",
+					CV_LOAD_IMAGE_COLOR);
 	this->statusFrame = statusBackground.clone();
 
-	if (!this->statusFrame.data){
+	if (!this->statusFrame.data) {
 		ROS_INFO("Couldn't find background.");
 	}
 
@@ -44,14 +46,13 @@ NavigationData::NavigationData(void)
 }
 
 // NavigationData class destructor.
-NavigationData::~NavigationData(void)
-{
+NavigationData::~NavigationData(void) {
 	destroyWindow(this->StatusWindow);
 }
 
 // Process the navigation data from the drone.
-void NavigationData::ProcessNavigationData(const ardrone_autonomy::Navdata& ardroneData)
-{
+void NavigationData::ProcessNavigationData(
+		const ardrone_autonomy::Navdata& ardroneData) {
 	// Set drone data in the NavigationData class.
 	this->BatteryLevel(ardroneData.batteryPercent);
 	this->State(ardroneData.state);
@@ -71,8 +72,7 @@ void NavigationData::ProcessNavigationData(const ardrone_autonomy::Navdata& ardr
 
 	fps++;
 
-	if (difftime(this->current, this->last) > 1.0)
-	{
+	if (difftime(this->current, this->last) > 1.0) {
 		// A second has elapsed, set the current fps.
 		this->currentFps = this->fps;
 
@@ -93,22 +93,21 @@ void NavigationData::ProcessNavigationData(const ardrone_autonomy::Navdata& ardr
 }
 
 // Shows the window.
-void NavigationData::ShowWindow()
-{
+void NavigationData::ShowWindow() {
 	imshow(this->StatusWindow, this->statusFrame);
 	waitKey(3);
 	this->statusFrame.release();
 }
 
 // Processes the drone's current status to to displayed the status window.
-void NavigationData::DisplayDroneStatus(void)
-{
+void NavigationData::DisplayDroneStatus(void) {
 	// Reset the background image.
 	this->statusFrame = statusBackground.clone();
 
 	// Write text to the frame.
 	this->DisplayText(this->BatteryLevel(), "Battery Level", 1);
-	this->DisplayText(this->State(),"State: " + this->getStateText(this->State()), 2);
+	this->DisplayText(this->State(),
+			"State: " + this->getStateText(this->State()), 2);
 	this->DisplayText(this->Altitude(), "Altitude", 3);
 	this->DisplayText(this->Temperature(), "Temperature", 4);
 	this->DisplayText(this->WindSpeed(), "Wind Speed", 5);
@@ -125,23 +124,20 @@ void NavigationData::DisplayDroneStatus(void)
 	this->DisplayText(this->currentFps, "FPS", 19);
 }
 
-
 // Overload of the DisplayText to convert int to float.
-void NavigationData::DisplayText(int value, string description, int x)
-{
-	this->DisplayText(static_cast< float >(value), description, x);
+void NavigationData::DisplayText(int value, string description, int x) {
+	this->DisplayText(static_cast<float>(value), description, x);
 }
 
 // Displays the text to the status window.
-void NavigationData::DisplayText(float value, string description, int x)
-{
+void NavigationData::DisplayText(float value, string description, int x) {
 	cv::Point textCoords(20, 15 * x);
 	string textToDisplay = description + ": " + this->NumberToString(value);
-	cv::putText(this->statusFrame, textToDisplay, textCoords, FONT_HERSHEY_PLAIN, 1.0, Scalar::all(255), 1, 8);
+	cv::putText(this->statusFrame, textToDisplay, textCoords,
+			FONT_HERSHEY_PLAIN, 1.0, Scalar::all(255), 1, 8);
 }
 
-string NavigationData::NumberToString(float num)
-{
+string NavigationData::NumberToString(float num) {
 	ostringstream buff;
 	//buff << fixed << setprecision(2) << num;
 	buff << num;
@@ -149,219 +145,187 @@ string NavigationData::NumberToString(float num)
 }
 
 // Sets the drone's battery level.
-void NavigationData::BatteryLevel(float batteryLevel)
-{
+void NavigationData::BatteryLevel(float batteryLevel) {
 	this->batteryLevel = batteryLevel;
 }
 
 // Gets the drone's battery level.
-float NavigationData::BatteryLevel(void)
-{
+float NavigationData::BatteryLevel(void) {
 	return this->batteryLevel;
 }
 
 // Sets the state of the drone.
-void NavigationData::State(int state)
-{
+void NavigationData::State(int state) {
 	this->state = state;
 }
 
 // Gets the string of the state number.
-std::string NavigationData::getStateText(int state)
-{
-	switch(state)
-	{
-		case 0:
-			return "Unknown";
-			break;
-		case 1:
-			return "Initiated";
-			break;
-		case 2:
-			return "Landed";
-			break;
-		case 3:
-		case 7:
-			return "Flying";
-			break;
-		case 4:
-			return "Hovering";
-			break;
-		case 5:
-			return "Test";
-			break;
-		case 6:
-			return "Taking Off";
-			break;
-		case 9:
-			return "Looping";
-			break;
-		default:
-			return "Unknown State";
-			break;
+std::string NavigationData::getStateText(int state) {
+	switch (state) {
+	case 0:
+		return "Unknown";
+		break;
+	case 1:
+		return "Initiated";
+		break;
+	case 2:
+		return "Landed";
+		break;
+	case 3:
+	case 7:
+		return "Flying";
+		break;
+	case 4:
+		return "Hovering";
+		break;
+	case 5:
+		return "Test";
+		break;
+	case 6:
+		return "Taking Off";
+		break;
+	case 9:
+		return "Looping";
+		break;
+	default:
+		return "Unknown State";
+		break;
 	}
 
 	return "Unknown";
 }
 
 // Gets the state of the drone.
-int NavigationData::State(void)
-{
+int NavigationData::State(void) {
 	return this->state;
 }
 
 // Sets the altitude of the drone.
-void NavigationData::Altitude(int altitude)
-{
+void NavigationData::Altitude(int altitude) {
 	this->altitude = altitude;
 }
 
 // Gets the altitude of the drone.
-int NavigationData::Altitude(void)
-{
+int NavigationData::Altitude(void) {
 	return this->altitude;
 }
 
 // Sets the temperature of the drone.
-void NavigationData::Temperature(int temperature)
-{
+void NavigationData::Temperature(int temperature) {
 	this->temperature = temperature;
 }
 
 // Gets the temperature of the drone.
-int NavigationData::Temperature(void)
-{
+int NavigationData::Temperature(void) {
 	return this->temperature;
 }
 
 // Sets the estimated wind speed about the drone.
-void NavigationData::WindSpeed(float windSpeed)
-{
+void NavigationData::WindSpeed(float windSpeed) {
 	this->windSpeed = windSpeed;
 }
 
 // Gets the estimated wind speed about the drone.
-float NavigationData::WindSpeed(void)
-{
+float NavigationData::WindSpeed(void) {
 	return this->windSpeed;
 }
 
 // Sets the estimated wing angle about the drone.
-void NavigationData::WindAngle(float wingAngle)
-{
+void NavigationData::WindAngle(float wingAngle) {
 	this->windAngle = windAngle;
 }
 
 // Gets the estimated wing angle about the drone.
-float NavigationData::WindAngle(void)
-{
+float NavigationData::WindAngle(void) {
 	return this->windAngle;
 }
 
 // Sets the x-axis rotation of the drone.
-void NavigationData::RotationX(float rotationX)
-{
+void NavigationData::RotationX(float rotationX) {
 	this->rotationX = rotationX;
 }
 
 // Gets the x-axis rotation of the drone.
-float NavigationData::RotationX(void)
-{
+float NavigationData::RotationX(void) {
 	return this->rotationX;
 }
 
 // Sets the y-axis rotation of the drone.
-void NavigationData::RotationY(float rotationY)
-{
+void NavigationData::RotationY(float rotationY) {
 	this->rotationY = rotationY;
 }
 
 // Gets the y-axis rotation of the drone.
-float NavigationData::RotationY(void)
-{
+float NavigationData::RotationY(void) {
 	return this->rotationY;
 }
 
 // Sets the z-axis rotation of the drone.
-void NavigationData::RotationZ(float rotationZ)
-{
+void NavigationData::RotationZ(float rotationZ) {
 	this->rotationZ = rotationZ;
 }
 
 // Gets the z-axis rotation of the drone.
-float NavigationData::RotationZ(void)
-{
+float NavigationData::RotationZ(void) {
 	return this->rotationZ;
 }
 
 // Sets the x-axis velocity of the drone.
-void NavigationData::VelocityX(float velocityX)
-{
+void NavigationData::VelocityX(float velocityX) {
 	this->velocityX = velocityX;
 }
 
 // Gets the x-axis velocity of the drone.
-float NavigationData::VelocityX(void)
-{
+float NavigationData::VelocityX(void) {
 	return this->velocityX;
 }
 
 // Sets the y-axis velocity of the drone.
-void NavigationData::VelocityY(float velocityY)
-{
+void NavigationData::VelocityY(float velocityY) {
 	this->velocityY = velocityY;
 }
 
 // Gets the y-axis velocity of the drone.
-float NavigationData::VelocityY(void)
-{
+float NavigationData::VelocityY(void) {
 	return this->velocityY;
 }
 
 // Sets the z-axis velocity of the drone.
-void NavigationData::VelocityZ(float velocityZ)
-{
+void NavigationData::VelocityZ(float velocityZ) {
 	this->velocityZ = velocityZ;
 }
 
 // Gets the z-axis velocity of the drone.
-float NavigationData::VelocityZ(void)
-{
+float NavigationData::VelocityZ(void) {
 	return this->velocityZ;
 }
 
 // Sets the x-axis acceleration of the drone.
-void NavigationData::AccelerationX(float accelerationX)
-{
+void NavigationData::AccelerationX(float accelerationX) {
 	this->accelerationX = accelerationX;
 }
 
 // Gets the x-axis acceleration of the drone.
-float NavigationData::AccelerationX(void)
-{
+float NavigationData::AccelerationX(void) {
 	return this->accelerationX;
 }
 
 // Sets the y-axis acceleration of the drone.
-void NavigationData::AccelerationY(float accelerationY)
-{
+void NavigationData::AccelerationY(float accelerationY) {
 	this->accelerationY = accelerationY;
 }
 
 // Gets the y-axis acceleration of the drone.
-float NavigationData::AccelerationY(void)
-{
+float NavigationData::AccelerationY(void) {
 	return this->accelerationY;
 }
 
 // Sets the z-axis acceleration of the drone.
-void NavigationData::AccelerationZ(float accelerationZ)
-{
+void NavigationData::AccelerationZ(float accelerationZ) {
 	this->accelerationZ = accelerationZ;
 }
 
 // Gets the z-axis acceleration of the drone.
-float NavigationData::AccelerationZ(void)
-{
+float NavigationData::AccelerationZ(void) {
 	return this->accelerationZ;
 }
