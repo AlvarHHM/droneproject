@@ -7,16 +7,13 @@ using namespace tld;
 const char ImageProcess::WINDOWNAME[] = "Drone Project";
 
 // Default constructor for the ImageProcess class.
-ImageProcess::ImageProcess(NodeHandle& node, string& importModel, bool cameraOnly)
+ImageProcess::ImageProcess(Flight* flight, string& importModel, bool cameraOnly)
 {
 	// Create the window that will show the camera feed.
 	namedWindow(this->WINDOWNAME, WINDOW_AUTOSIZE);
 
-	// Set the node handle.
-	this->nodeHandle = node;
-
 	// Create a new instance of the flight class.
-	this->flight = new Flight(this->nodeHandle);
+	this->flight = flight;
 
 	this->tld = new tld::TLD();
 

@@ -31,7 +31,7 @@ class ImageProcess
 {
 public:
 	// Constructor for the ImageProcess class.
-	ImageProcess(NodeHandle& node, string& importModel, bool cameraOnly);
+	ImageProcess(Flight* flight, string& importModel, bool cameraOnly);
 
 	// Destructor for the ImageProcess class.
 	~ImageProcess(void);
@@ -50,9 +50,6 @@ public:
 
 	// Processes the keyboard input.
 	void ProcessKeyInput(int input);
-
-	// Node handle.
-	NodeHandle nodeHandle;
 
 	// Processes the current information to send flight commands to the drone.
 	Flight* flight;

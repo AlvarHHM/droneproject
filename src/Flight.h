@@ -31,7 +31,7 @@ public:
 	~Flight(void);
 
 	// Process image data to convert into flight commands.
-	void ProcessFlight(StateData& stateData);
+	virtual void ProcessFlight(StateData& stateData) = 0;
 
 	// Emergency stops the drone's flight.
 	void EmergencyStop(void);
@@ -49,7 +49,7 @@ public:
 	void TakeOff(void);
 
 	// Sets the initial bounding box.
-	void InitialBoundingBox(Rect* boundingBox);
+	virtual void InitialBoundingBox(Rect* boundingBox) = 0;
 
 	// Returns if flight is allowed or not.
 	bool FlightStatus(void);
@@ -95,7 +95,7 @@ public:
 	// The original bounding box for the tracked object.
 	Rect* originalBoundingBox;
 
-private:
+protected:
 
 	// States whether it is the first flight command, if it is then PID cannot be done.
 	bool firstCommand;

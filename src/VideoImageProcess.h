@@ -17,7 +17,7 @@ class VideoImageProcess: public ImageProcess
 {
 public:
 	// VideoImageProcess class constructor.
-	VideoImageProcess(NodeHandle& node, string videoName, string& importModel);
+	VideoImageProcess(Flight* flight, string videoName, string& importModel);
 
 	// VideoImageProcess class destructor.
 	~VideoImageProcess(void);

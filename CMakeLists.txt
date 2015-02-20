@@ -49,6 +49,8 @@ add_executable(DroneProject
 	src/VideoImageProcess.h src/VideoImageProcess.cpp 
 	src/StateData.h src/StateData.cpp 
 	src/Flight.h src/Flight.cpp 
+	src/BottomTrackFlight.h src/BottomTrackFlight.cpp 
+	src/FrontTrackFlight.h src/FrontTrackFlight.cpp
 	src/Pid.h src/Pid.cpp
     src/tld/Clustering.h
 	src/tld/Clustering.cpp

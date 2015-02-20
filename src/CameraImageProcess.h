@@ -27,7 +27,7 @@ class CameraImageProcess: public ImageProcess
 {
 public:
 	// Default constructor for camera image processing.
-	CameraImageProcess(NodeHandle& node, bool record, string& importModel);
+	CameraImageProcess(Flight* flight, bool record, string& importModel);
 
 	// Destructor for the CameraImageProcess class.
 	~CameraImageProcess(void);

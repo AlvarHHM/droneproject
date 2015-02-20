@@ -6,7 +6,7 @@ using namespace std;
 using namespace cv_bridge;
 
 // Default constructor for camera image processing.
-CameraImageProcess::CameraImageProcess(NodeHandle& node, bool record, string& importModel) : ImageProcess(node, importModel, true)
+CameraImageProcess::CameraImageProcess(Flight* flight, bool record, string& importModel) : ImageProcess(flight, importModel, true)
 {
 	this->recordVideo = record;
 
@@ -33,6 +33,7 @@ CameraImageProcess::~CameraImageProcess(void)
 // Converts the image from ROS Image to OpenCV type Mat.
 void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr& msg)
 {
+
 	// Get the current image and flip it to the current state data.
 	this->GetImage(msg);
 

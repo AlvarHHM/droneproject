@@ -97,7 +97,7 @@ void tldExtractSubImage(const Mat &img, Mat &subImage, int *boundary)
 void tldExtractNormalizedPatch(const Mat &img, int x, int y, int w, int h, float *output)
 {
     Mat subImage;
-    tldExtractSubImage(img, subImage, Rect(x, y, w, h));
+    tldExtractSubImage(img, subImage, (CvRect)Rect(x, y, w, h));
     tldNormalizeImg(subImage, output);
 }
 

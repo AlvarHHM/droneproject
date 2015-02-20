@@ -4,7 +4,7 @@ using namespace std;
 using namespace cv;
 
 // VideoImageProcess class constructor.
-VideoImageProcess::VideoImageProcess(NodeHandle& node, string videoName, string& importModel) : ImageProcess(node, importModel, false)
+VideoImageProcess::VideoImageProcess(Flight* flight, string videoName, string& importModel) : ImageProcess(flight, importModel, false)
 {
 	// Set the current state to start state.
 	this->currentState = new StateSelecting();
