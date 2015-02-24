@@ -84,7 +84,8 @@ void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr& msg) {
 			this->textCoords, FONT_HERSHEY_PLAIN, 1.0, Scalar::all(255), 1, 8);
 
 	// Show image.
-	imshow(WINDOWNAME, this->CurrentStateData()->Image());
+//	imshow(WINDOWNAME, this->CurrentStateData()->Image());
+	imshow(WINDOWNAME, this->CurrentStateData()->LastGray());
 }
 
 // Initialises the video capture to file.

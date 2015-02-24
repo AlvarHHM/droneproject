@@ -109,7 +109,7 @@ void ImageProcess::ProcessKeyInput(int input) {
 		// Pressed the j button.
 
 		// Decrease the altitude.
-		this->flight->LinearZ(this->flight->LinearX() - 0.1);
+		this->flight->LinearZ(this->flight->LinearZ() - 0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearZ to " << this->flight->LinearZ() << endl;
 	} else if (input == 1048608 || input == 32) {
@@ -122,6 +122,29 @@ void ImageProcess::ProcessKeyInput(int input) {
 		this->tld->learningEnabled = !this->tld->learningEnabled;
 		cout << "Learning "
 				<< (this->tld->learningEnabled == true ? "On" : "Off") << endl;
+	}else if(input == 65362){
+		// Pressed the arrow up button.
+
+		this->flight->LinearX(this->flight->LinearX() + 0.1);
+		this->flight->SendFlightCommand();
+		cout << "Decreased LinearX to " << this->flight->LinearX() << endl;
+	}else if(input == 65364){
+		// Pressed the arrow down button.
+		this->flight->LinearX(this->flight->LinearX() - 0.1);
+		this->flight->SendFlightCommand();
+		cout << "Decreased LinearX to " << this->flight->LinearX() << endl;
+	}else if(input == 65361){
+		// Pressed the arrow left button.
+
+		this->flight->LinearY(this->flight->LinearY() + 0.1);
+		this->flight->SendFlightCommand();
+		cout << "Decreased LinearX to " << this->flight->LinearY() << endl;
+	}else if(input == 65363){
+		// Pressed the arrow right button.
+
+		this->flight->LinearY(this->flight->LinearY() - 0.1);
+		this->flight->SendFlightCommand();
+		cout << "Decreased LinearX to " << this->flight->LinearY() << endl;
 	}
 
 }

@@ -41,21 +41,17 @@ void BottomTrackFlight::InitialBoundingBox(Rect* boundingBox) {
 
 	// Calculate the "middle point" for calculating error, which will be the bounding box height + width.
 	// TODO: Change.
-	this->PidX = new Pid(this->middleY, 29 / 2.2, 0.02, 0.005);
+//	this->PidX = new Pid(this->middleY, 0,0,0);
+//	this->PidX = new Pid(this->middleY, 29 / 2.2, 0.02, 0.005);
+	this->PidX = new Pid(this->middleY,  15 / 2.2, 0.005, 0.00125);
 
 	// X-axis on the 2D image represents the Y-axis in the 3D plane.
 	// Initialise the PID Controller for the Y-axis.
-	this->PidY = new Pid(this->middleX, 29 / 2.2, 0.02, 0.005);
-//
-//	// Y-axis on the 2D image represents the Z-axis in the 3D plane.
-//	// Initialise the PID controller for the Z-axis.
-//	this->PidZ = new Pid(this->middleY, 0, 0, 0);
-//
-//	// Initialise the angular Z PID, used for calculating left and right turn.
-//	this->PidAngularZ = new Pid(this->middleX, 29 / 2.2, 0.02, 0.005);
-//	// Ku = 29.
-//
-//	// Pu = ~1.25
+//	this->PidY = new Pid(this->middleX, 0,0,0);
+//	this->PidY = new Pid(this->middleX, 29 / 2.2, 0.02, 0.005);
+	this->PidY = new Pid(this->middleX,  15 / 2.2, 0.005, 0.00125);
+
+
 }
 
 // Process image data to convert into flight commands.
@@ -88,6 +84,7 @@ void BottomTrackFlight::ProcessFlight(StateData& stateData) {
 			 */
 
 			int offsetY = 320 - (this->currentBoundingBox->width / 2);
+			int offsetX = 320 - (this->currentBoundingBox->height / 2);
 
 			// Update the current timer.
 			gettimeofday(&this->currentTime, NULL);
@@ -115,14 +112,14 @@ void BottomTrackFlight::ProcessFlight(StateData& stateData) {
 				 * The distance from the drone to the object can be shown as how big the bounding box is in comparison
 				 * to either the original bounding box given or one specified by the user for a known object.
 				 */
-				double linearX = this->PidX->ProcessPid(this->middleY,
+				double linearX = this->PidX->ProcessPid(this->currentBoundingBox->y,
 						this->timeDifference);
-				//cout << "Movement X: " << linearX << endl;
+//				cout << "Movement X: " << linearX << endl;
 				this->LinearX(linearX);
 
-				double linearY = this->PidY->ProcessPid(this->middleX,
+				double linearY = this->PidY->ProcessPid(this->currentBoundingBox->x,
 						this->timeDifference);
-				//cout << "Movement Y: " << linearY << endl;
+//				cout << "Movement Y: " << linearY << endl;
 				this->LinearY(linearY);
 			} else {
 				// If this is the first command, skip PID processing.
