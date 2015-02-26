@@ -56,6 +56,20 @@ StateData* ImageProcess::CurrentStateData(void) {
 	return this->currentStateData;
 }
 
+void ImageProcess::drawArrow(cv::Mat &img, cv::Point pStart, cv::Point pEnd, int len, int alpha,
+		cv::Scalar &color, int thickness, int lineType) {
+	const double PI = 3.1415926;
+	Point arrow;
+	double angle = atan2((double) (pStart.y - pEnd.y), (double) (pStart.x - pEnd.x));
+	line(img, pStart, pEnd, color, thickness, lineType);
+	arrow.x = pEnd.x + len * cos(angle + PI * alpha / 180);
+	arrow.y = pEnd.y + len * sin(angle + PI * alpha / 180);
+	line(img, pEnd, arrow, color, thickness, lineType);
+	arrow.x = pEnd.x + len * cos(angle - PI * alpha / 180);
+	arrow.y = pEnd.y + len * sin(angle - PI * alpha / 180);
+	line(img, pEnd, arrow, color, thickness, lineType);
+}
+
 // Processes the keyboard input.
 void ImageProcess::ProcessKeyInput(int input) {
 	if (input == 1048678 || input == 102) {
@@ -122,6 +136,14 @@ void ImageProcess::ProcessKeyInput(int input) {
 		this->tld->learningEnabled = !this->tld->learningEnabled;
 		cout << "Learning "
 				<< (this->tld->learningEnabled == true ? "On" : "Off") << endl;
+	}else if(input == 99){
+		// Pressed the c button.
+		time_t rawtime;
+		time (&rawtime);
+		char buffer[50];
+		sprintf(buffer,"./grey_%s.jpg", ctime(&rawtime));
+		imwrite( buffer, this->CurrentStateData()->LastGray() );
+
 	}else if(input == 65362){
 		// Pressed the arrow up button.
 
@@ -145,6 +167,8 @@ void ImageProcess::ProcessKeyInput(int input) {
 		this->flight->LinearY(this->flight->LinearY() - 0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearX to " << this->flight->LinearY() << endl;
+	}else{
+		ROS_INFO("%d",input);
 	}
 
 }

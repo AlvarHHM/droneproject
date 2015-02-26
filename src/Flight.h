@@ -94,7 +94,13 @@ public:
 	// The original bounding box for the tracked object.
 	Rect* originalBoundingBox;
 
-protected:
+	// Middle value for X.
+	int middleX;
+
+	// Middle value for Y.
+	int middleY;
+
+//protected:
 
 	// States whether it is the first flight command, if it is then PID cannot be done.
 	bool firstCommand;
@@ -111,11 +117,7 @@ protected:
 	// Calculates the movement value for angular z.
 	Pid* PidAngularZ;
 
-	// Middle value for X.
-	int middleX;
 
-	// Middle value for Y.
-	int middleY;
 
 	// Node handler.
 	NodeHandle nodeHandle;

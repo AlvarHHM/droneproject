@@ -113,12 +113,12 @@ void BottomTrackFlight::ProcessFlight(StateData& stateData) {
 				 * to either the original bounding box given or one specified by the user for a known object.
 				 */
 				double linearX = this->PidX->ProcessPid(this->currentBoundingBox->y,
-						this->timeDifference);
+						this->timeDifference) * -1;
 //				cout << "Movement X: " << linearX << endl;
 				this->LinearX(linearX);
 
 				double linearY = this->PidY->ProcessPid(this->currentBoundingBox->x,
-						this->timeDifference);
+						this->timeDifference) * -1;
 //				cout << "Movement Y: " << linearY << endl;
 				this->LinearY(linearY);
 			} else {
