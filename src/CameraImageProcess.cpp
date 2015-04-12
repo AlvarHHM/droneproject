@@ -85,7 +85,7 @@ void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr &msg) {
 
     //Draw flight direction
     Scalar color(0, 0, 255);
-    if(this->flight->flightAllowed == true && this->currentStateData->tld->currConf >= 0.5){
+    if(this->flight->flightAllowed && this->currentStateData->tld->currConf >= 0.5){
 
         int bbMidX = this->flight->currentBoundingBox->x + this->flight->currentBoundingBox->width/2;
         int bbMidY = this->flight->currentBoundingBox->y + this->flight->currentBoundingBox->height/2;

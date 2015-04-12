@@ -8,7 +8,9 @@ project(droneproject)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-set(CMAKE_CXX_FLAGS "-std=c++0x")
+set(CMAKE_CXX_FLAGS "-Ofast")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#set(CMAKE_CXX_FLAGS "-std=c++0x")
 find_package(OpenCV)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
