@@ -61,6 +61,8 @@ private:
 
 	// States whether or not to record the video feed.
 	bool recordVideo;
+
+	bool first;
 };
 
 #endif

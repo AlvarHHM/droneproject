@@ -165,6 +165,11 @@ public:
 
 	// Sets the different axis linear values.
 	void SetHoverValues(double x, double y, double z, double angularZ);
+
+protected:
+
+	void drawArrow(cv::Mat &img, cv::Point pStart, cv::Point pEnd, int len, int alpha,
+									  cv::Scalar &color, int thickness, int lineType);
 };
 
 #endif

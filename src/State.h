@@ -2,6 +2,7 @@
 #define STATE_H
 
 #include <opencv/cv.hpp>
+#include <boost/thread.hpp>
 #include "StateData.h"
 
 using namespace cv;
@@ -28,14 +29,14 @@ public:
 	;
 
 	// Colour definitions.
-	static const CvScalar RED;
-	static const CvScalar BLUE;
-	static const CvScalar GREEN;
-	static const CvScalar CYAN;
-	static const CvScalar MAGENTA;
-	static const CvScalar YELLOW;
-	static const CvScalar WHITE;
-	static const CvScalar BLACK;
+	static const Scalar RED;
+	static const Scalar BLUE;
+	static const Scalar GREEN;
+	static const Scalar CYAN;
+	static const Scalar MAGENTA;
+	static const Scalar YELLOW;
+	static const Scalar WHITE;
+	static const Scalar BLACK;
 };
 
 class StartState: public State {

@@ -126,6 +126,9 @@ void BottomTrackFlight::ProcessFlight(StateData& stateData) {
 				this->firstCommand = false;
 				return;
 			}
+
+			drawFlightDirection(stateData);
+
 		}
 
 		// Send the command to the drone.
@@ -135,3 +138,22 @@ void BottomTrackFlight::ProcessFlight(StateData& stateData) {
 
 	// TODO: Take into account the lag between video feed in, flight command out and it actually done to make the flight more responsive.
 }
+
+void BottomTrackFlight::drawFlightDirection(StateData &stateData) {
+	Scalar color(0, 0, 255);
+	int bbMidX = currentBoundingBox->x + currentBoundingBox->width/2;
+	int bbMidY = currentBoundingBox->y + currentBoundingBox->height/2;
+
+	drawArrow(stateData.image,
+					  Point(bbMidX,bbMidY),
+					  Point(bbMidX + (int)(LinearY() * -500),
+							bbMidY),
+					  10, 45, color, 1, 4);
+	drawArrow(stateData.image,
+					  Point(bbMidX,bbMidY),
+					  Point(bbMidX,
+							bbMidY + (int)(LinearX() * -500)),
+					  10, 45, color, 1, 4);
+}
+
+

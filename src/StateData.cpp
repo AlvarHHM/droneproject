@@ -5,11 +5,12 @@ using namespace cv;
 using namespace std;
 
 // StateData class constructor.
-StateData::StateData(tld::TLD& tld, const char* windowName, Flight& flight,
+StateData::StateData(tld::TLD& tld, const char* windowName, Flight& flight, ObstacleAvoid& obstacleAvoid,
 		bool& importedModel, bool cameraOnly) {
 	this->selector = new Selector(windowName, flight);
 	this->flight = &flight;
 	this->tld = &tld;
+	this->obstacleAvoid = &obstacleAvoid;
 	this->modelImported = importedModel;
 	this->cameraOnly = cameraOnly;
 }

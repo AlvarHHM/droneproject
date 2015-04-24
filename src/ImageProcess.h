@@ -51,9 +51,7 @@ public:
 	// Processes the keyboard input.
 	void ProcessKeyInput(int input);
 
-	// Draw arrow on the window
-	void drawArrow(cv::Mat &img, cv::Point pStart, cv::Point pEnd, int len, int alpha,
-			cv::Scalar &color, int thickness, int lineType);
+	ObstacleAvoid* obstacleAvoid;
 
 	// Processes the current information to send flight commands to the drone.
 	Flight* flight;

@@ -46,9 +46,13 @@ void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr &msg) {
     // Convert the colour.
     cvtColor(this->CurrentStateData()->image,
             this->CurrentStateData()->lastGray, CV_BGR2GRAY);
+    this->CurrentStateData()->image.copyTo(this->CurrentStateData()->displayImg);
 
     // Process the current state.
     this->currentState = this->currentState->Do(this->CurrentStateData());
+//    this->currentStateData->obstacleAvoid->processFrame(
+//            this->currentStateData->lastGray
+//    );
 
     boost::thread_group threadGroup;
 
@@ -65,7 +69,7 @@ void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr &msg) {
     if (this->recordVideo and this->writer->isOpened()) {
         threadGroup.add_thread(
                 new boost::thread(&VideoWriter::write, this->writer,
-                        this->CurrentStateData()->Image()));
+                        this->CurrentStateData()->displayImg));
     }
 
     // Process the keyboard input.
@@ -73,38 +77,20 @@ void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr &msg) {
     if (keyInput != -1) {
         threadGroup.add_thread(
                 new boost::thread(&ImageProcess::ProcessKeyInput, this,
-                        keyInput));
+                        keyInput  & 0xff));
     }
 
     // Synchronize threads.
     threadGroup.join_all();
 
     // Display FPS to screen.
-    cv::putText(this->CurrentStateData()->image, this->textToDisplay,
-            this->textCoords, FONT_HERSHEY_PLAIN, 1.0, Scalar::all(255), 1, 8);
+    cv::putText(this->CurrentStateData()->displayImg, this->textToDisplay,
+            this->textCoords, FONT_HERSHEY_PLAIN, 1.0, Scalar(0,0,255), 1, 8);
 
-    //Draw flight direction
-    Scalar color(0, 0, 255);
-    if(this->flight->flightAllowed && this->currentStateData->tld->currConf >= 0.5){
-
-        int bbMidX = this->flight->currentBoundingBox->x + this->flight->currentBoundingBox->width/2;
-        int bbMidY = this->flight->currentBoundingBox->y + this->flight->currentBoundingBox->height/2;
-        drawArrow(this->CurrentStateData()->image,
-                Point(bbMidX,bbMidY),
-                Point(bbMidX + (int)(this->flight->LinearY() * -500),
-                        bbMidY),
-                10, 45, color, 1, 4);
-        drawArrow(this->CurrentStateData()->image,
-                Point(bbMidX,bbMidY),
-                Point(bbMidX,
-                        bbMidY + (int)(this->flight->LinearX() * -500)),
-                10, 45, color, 1, 4);
-    }
 
 
     // Show image.
-    imshow(WINDOWNAME, this->CurrentStateData()->Image());
-//	imshow(WINDOWNAME, this->CurrentStateData()->LastGray());
+    imshow(WINDOWNAME, this->CurrentStateData()->displayImg);
 }
 
 // Initialises the video capture to file.

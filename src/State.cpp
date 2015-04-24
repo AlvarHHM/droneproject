@@ -4,14 +4,14 @@ using namespace cv;
 using namespace std;
 
 // Colour definitions.
-const CvScalar State::RED = Scalar(0, 0, 255);
-const CvScalar State::BLUE = Scalar(255, 0, 0);
-const CvScalar State::GREEN = Scalar(0, 255, 0);
-const CvScalar State::CYAN = Scalar(255, 255, 0);
-const CvScalar State::MAGENTA = Scalar(255, 0, 255);
-const CvScalar State::YELLOW = Scalar(0, 255, 255);
-const CvScalar State::WHITE = Scalar(255, 255, 255);
-const CvScalar State::BLACK = Scalar(0, 0, 0);
+const Scalar State::RED = Scalar(0, 0, 255);
+const Scalar State::BLUE = Scalar(255, 0, 0);
+const Scalar State::GREEN = Scalar(0, 255, 0);
+const Scalar State::CYAN = Scalar(255, 255, 0);
+const Scalar State::MAGENTA = Scalar(255, 0, 255);
+const Scalar State::YELLOW = Scalar(0, 255, 255);
+const Scalar State::WHITE = Scalar(255, 255, 255);
+const Scalar State::BLACK = Scalar(0, 0, 0);
 
 StateSelecting::StateSelecting(void) :
 		State() {
@@ -61,6 +61,7 @@ State* StateInitializing::Do(StateData* stateData) {
 		stateData->tld->selectObject(stateData->lastGray,
 				&stateData->Selection());
 	}
+	stateData->obstacleAvoid->init(stateData->lastGray);
 
 	// Call state tracking with current state data.
 	return new StateTracking();
@@ -78,14 +79,28 @@ State* StateTracking::Do(StateData* stateData) {
 		cout << "**** Selecting State ****" << endl;
 		return new StateSelecting();
 	}
-
+//	boost::thread_group tgroup;
+//	if(true && stateData->flight->flightAllowed){
+//		tgroup.add_thread(new boost::thread(&ObstacleAvoid::processFrame, stateData->obstacleAvoid, stateData->lastGray));
+//	}
+//	tgroup.add_thread(new boost::thread(&tld::TLD::processImage, stateData->tld, stateData->image));
+//	tgroup.join_all();
 	stateData->tld->processImage(stateData->Image());
+	stateData->obstacleAvoid->processFrame(stateData->lastGray);
+
+//	if(stateData->obstacleAvoid->hasObstacle){
+		drawKeypoints(stateData->displayImg, stateData->obstacleAvoid->obstacleCluster,
+					  stateData->displayImg, Scalar(0, 0, 255),
+                      DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+		line(stateData->displayImg, Point(stateData->obstacleAvoid->obstacleX , 0),
+			 Point(stateData->obstacleAvoid->obstacleX , 100), Scalar(0, 0, 255), 5);
+//	}
 
 	int confident = (stateData->tld->currConf >= 0.5) ? 1 : 0;
 
 	if (stateData->tld->currBB != NULL) {
-		CvScalar rectangleColor = (confident) ? this->BLUE : this->YELLOW;
-		rectangle(stateData->image, stateData->tld->currBB->tl(),
+		Scalar rectangleColor = (confident) ? this->BLUE : this->YELLOW;
+		rectangle(stateData->displayImg, stateData->tld->currBB->tl(),
 				stateData->tld->currBB->br(), rectangleColor, 8, 8, 0);
 	}
 	return this;

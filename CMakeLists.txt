@@ -54,6 +54,8 @@ add_executable(DroneProject
 	src/BottomTrackFlight.h src/BottomTrackFlight.cpp 
 	src/FrontTrackFlight.h src/FrontTrackFlight.cpp
 	src/Pid.h src/Pid.cpp
+	src/KeyPointHistory.h src/KeyPointHistory.cpp
+	src/ObstacleAvoid.h src/ObstacleAvoid.cpp
     src/tld/Clustering.h
 	src/tld/Clustering.cpp
     src/tld/DetectionResult.h

@@ -20,6 +20,8 @@ public:
 
 	// Sets the initial bounding box.
 	void InitialBoundingBox(Rect* boundingBox);
+
+	void drawFlightDirection(StateData &stateData);
 };
 
 #endif /* DRONEPROJECT_BOTTOMTRACKFLIGHT_H_ */

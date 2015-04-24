@@ -17,6 +17,8 @@ ImageProcess::ImageProcess(Flight* flight, string& importModel,
 
 	this->tld = new tld::TLD();
 
+	this->obstacleAvoid = new ObstacleAvoid();
+
 	if (importModel != "") {
 		this->tld->readFromFile(importModel.c_str());
 		this->modelImported = true;
@@ -26,7 +28,7 @@ ImageProcess::ImageProcess(Flight* flight, string& importModel,
 
 	// Register mouse callback to draw the tracking box
 	this->currentStateData = new StateData(*this->tld, this->WINDOWNAME,
-			*this->flight, this->modelImported, cameraOnly);
+			*this->flight, *this->obstacleAvoid, this->modelImported, cameraOnly);
 
 	// Set the current state to start state.
 	this->currentState = new StartState();
@@ -43,6 +45,7 @@ ImageProcess::~ImageProcess(void) {
 	delete this->writer;
 	delete this->flight;
 	delete this->tld;
+	delete this->obstacleAvoid;
 	destroyWindow(this->WINDOWNAME);
 }
 
@@ -54,20 +57,6 @@ void ImageProcess::CurrentStateData(StateData* stateData) {
 // Gets the current state data.
 StateData* ImageProcess::CurrentStateData(void) {
 	return this->currentStateData;
-}
-
-void ImageProcess::drawArrow(cv::Mat &img, cv::Point pStart, cv::Point pEnd, int len, int alpha,
-		cv::Scalar &color, int thickness, int lineType) {
-	const double PI = 3.1415926;
-	Point arrow;
-	double angle = atan2((double) (pStart.y - pEnd.y), (double) (pStart.x - pEnd.x));
-	line(img, pStart, pEnd, color, thickness, lineType);
-	arrow.x = pEnd.x + len * cos(angle + PI * alpha / 180);
-	arrow.y = pEnd.y + len * sin(angle + PI * alpha / 180);
-	line(img, pEnd, arrow, color, thickness, lineType);
-	arrow.x = pEnd.x + len * cos(angle - PI * alpha / 180);
-	arrow.y = pEnd.y + len * sin(angle - PI * alpha / 180);
-	line(img, pEnd, arrow, color, thickness, lineType);
 }
 
 // Processes the keyboard input.
@@ -90,15 +79,16 @@ void ImageProcess::ProcessKeyInput(int input) {
 	} else if (input == 1048692 || input == 116) {
 		// Pressed the t key.
 		this->flight->TakeOff();
+		this->flight->Hover();
 
 	} else if (input == 1048690 || input == 114) {
 		// Pressed the r key.
 		// Increase the Prop for PID.
 
-		this->flight->prop += 1;
-		cout << "Prop increased to: " << this->flight->prop << endl;
-		//this->flight->Reset();
-		//ROS_INFO("Reset.");
+//		this->flight->prop += 1;
+//		cout << "Prop increased to: " << this->flight->prop << endl;
+		this->flight->Reset();
+		ROS_INFO("Reset.");
 	} else if (input == 1048677 || input == 101) {
 		// Pressed the e key.
 		// Export model to file.
@@ -135,7 +125,7 @@ void ImageProcess::ProcessKeyInput(int input) {
 		// Pressed the s key.
 		this->tld->learningEnabled = !this->tld->learningEnabled;
 		cout << "Learning "
-				<< (this->tld->learningEnabled == true ? "On" : "Off") << endl;
+				<< (this->tld->learningEnabled ? "On" : "Off") << endl;
 	}else if(input == 99){
 		// Pressed the c button.
 		time_t rawtime;
@@ -143,32 +133,31 @@ void ImageProcess::ProcessKeyInput(int input) {
 		char buffer[50];
 		sprintf(buffer,"./grey_%s.jpg", ctime(&rawtime));
 		imwrite( buffer, this->CurrentStateData()->LastGray() );
-
-	}else if(input == 65362){
+	}else if(input == 82){
 		// Pressed the arrow up button.
 
 		this->flight->LinearX(this->flight->LinearX() + 0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearX to " << this->flight->LinearX() << endl;
-	}else if(input == 65364){
+	}else if(input == 84){
 		// Pressed the arrow down button.
 		this->flight->LinearX(this->flight->LinearX() - 0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearX to " << this->flight->LinearX() << endl;
-	}else if(input == 65361){
+	}else if(input == 81){
 		// Pressed the arrow left button.
 
 		this->flight->LinearY(this->flight->LinearY() + 0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearX to " << this->flight->LinearY() << endl;
-	}else if(input == 65363){
+	}else if(input == 83){
 		// Pressed the arrow right button.
 
 		this->flight->LinearY(this->flight->LinearY() - 0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearX to " << this->flight->LinearY() << endl;
 	}else{
-		ROS_INFO("%d",input);
+		ROS_INFO("%d",input & 0xff);
 	}
 
 }

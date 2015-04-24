@@ -4,9 +4,12 @@
 #include <opencv/cv.hpp>
 #include "Selector.h"
 #include "Flight.h"
+#include "ObstacleAvoid.h"
 
 // TLD Includes.
 #include "tld/TLD.h"
+
+
 
 using namespace cv;
 using namespace std;
@@ -17,7 +20,7 @@ class TLD;
 class StateData {
 public:
 	// StateData class constructor.
-	StateData(tld::TLD& tld, const char* windowName, Flight& flight,
+	StateData(tld::TLD& tld, const char* windowName, Flight& flight, ObstacleAvoid& obstacleAvoid,
 			bool& importedModel, bool cameraOnly);
 
 	// StateData class destructor.
@@ -25,6 +28,8 @@ public:
 
 	// TLD object tracking data.
 	tld::TLD* tld;
+
+	ObstacleAvoid* obstacleAvoid;
 
 	// Gets the image retrieved from the drone's camera.
 	Mat& Image(void);
@@ -62,12 +67,15 @@ public:
 	//States whether it is a camera feed or video feed.
 	bool cameraOnly;
 
+	Mat displayImg;
+
 private:
 	// Selector for bounding box.
 	Selector* selector;
 
 	// Selection from user selection.
 	Rect selection;
+
 };
 
 #endif
