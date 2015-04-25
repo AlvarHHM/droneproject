@@ -85,7 +85,7 @@ State* StateTracking::Do(StateData* stateData) {
 //	}
 //	tgroup.add_thread(new boost::thread(&tld::TLD::processImage, stateData->tld, stateData->image));
 //	tgroup.join_all();
-	stateData->tld->processImage(stateData->Image());
+//	stateData->tld->processImage(stateData->Image());
 	stateData->obstacleAvoid->processFrame(stateData->lastGray);
 
 //	if(stateData->obstacleAvoid->hasObstacle){

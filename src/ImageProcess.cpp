@@ -98,7 +98,7 @@ void ImageProcess::ProcessKeyInput(int input) {
 		// Pressed the u button.
 
 		// Increase the altitude.
-		this->flight->LinearZ(this->flight->LinearZ() + 0.1);
+		this->flight->LinearZ(0.1);
 		this->flight->SendFlightCommand();
 		cout << "Increased LinearZ to " << this->flight->LinearZ() << endl;
 
@@ -113,7 +113,7 @@ void ImageProcess::ProcessKeyInput(int input) {
 		// Pressed the j button.
 
 		// Decrease the altitude.
-		this->flight->LinearZ(this->flight->LinearZ() - 0.1);
+		this->flight->LinearZ(-0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearZ to " << this->flight->LinearZ() << endl;
 	} else if (input == 1048608 || input == 32) {
@@ -135,25 +135,26 @@ void ImageProcess::ProcessKeyInput(int input) {
 		imwrite( buffer, this->CurrentStateData()->LastGray() );
 	}else if(input == 82){
 		// Pressed the arrow up button.
-
-		this->flight->LinearX(this->flight->LinearX() + 0.1);
+		this->flight->LinearY(0);
+		this->flight->LinearX(0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearX to " << this->flight->LinearX() << endl;
 	}else if(input == 84){
 		// Pressed the arrow down button.
-		this->flight->LinearX(this->flight->LinearX() - 0.1);
+		this->flight->LinearY(0);
+		this->flight->LinearX(-0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearX to " << this->flight->LinearX() << endl;
 	}else if(input == 81){
 		// Pressed the arrow left button.
-
-		this->flight->LinearY(this->flight->LinearY() + 0.1);
+		this->flight->LinearX(0);
+		this->flight->LinearY(0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearX to " << this->flight->LinearY() << endl;
 	}else if(input == 83){
 		// Pressed the arrow right button.
-
-		this->flight->LinearY(this->flight->LinearY() - 0.1);
+		this->flight->LinearX(0);
+		this->flight->LinearY(-0.1);
 		this->flight->SendFlightCommand();
 		cout << "Decreased LinearX to " << this->flight->LinearY() << endl;
 	}else{

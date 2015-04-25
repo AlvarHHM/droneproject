@@ -41,15 +41,15 @@ void BottomTrackFlight::InitialBoundingBox(Rect* boundingBox) {
 
 	// Calculate the "middle point" for calculating error, which will be the bounding box height + width.
 	// TODO: Change.
-//	this->PidX = new Pid(this->middleY, 0,0,0);
 //	this->PidX = new Pid(this->middleY, 29 / 2.2, 0.02, 0.005);
-	this->PidX = new Pid(this->middleY,  15 / 2.2, 0.005, 0.00125);
+	this->PidX = new Pid(this->middleY,  5 / 2.2, 0.005, 0.00125);
+//	this->PidX = new Pid(this->middleY,  6.0, 0.005, 0.00125);
 
 	// X-axis on the 2D image represents the Y-axis in the 3D plane.
 	// Initialise the PID Controller for the Y-axis.
-//	this->PidY = new Pid(this->middleX, 0,0,0);
 //	this->PidY = new Pid(this->middleX, 29 / 2.2, 0.02, 0.005);
-	this->PidY = new Pid(this->middleX,  15 / 2.2, 0.005, 0.00125);
+	this->PidY = new Pid(this->middleX,  5 / 2.2, 0.005, 0.00125);
+//	this->PidX = new Pid(this->middleY,  6.0, 0.005, 0.00125);
 
 
 }
@@ -144,12 +144,12 @@ void BottomTrackFlight::drawFlightDirection(StateData &stateData) {
 	int bbMidX = currentBoundingBox->x + currentBoundingBox->width/2;
 	int bbMidY = currentBoundingBox->y + currentBoundingBox->height/2;
 
-	drawArrow(stateData.image,
+	drawArrow(stateData.displayImg,
 					  Point(bbMidX,bbMidY),
 					  Point(bbMidX + (int)(LinearY() * -500),
 							bbMidY),
 					  10, 45, color, 1, 4);
-	drawArrow(stateData.image,
+	drawArrow(stateData.displayImg,
 					  Point(bbMidX,bbMidY),
 					  Point(bbMidX,
 							bbMidY + (int)(LinearX() * -500)),

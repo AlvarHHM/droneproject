@@ -97,12 +97,15 @@ void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr &msg) {
 void CameraImageProcess::InitialiseVideoCapture(void) {
     // TODO: Make this make a name dependent on date/time.
     // Or through the command line.
-    string videoName =
-            "/home/ardrone/ros_workspace/sandbox/drone_project/bin/video1.avi";
+    string videoName =  "/home/ardrone/video1.mp4";
+//    time_t rawtime;
+//    time (&rawtime);
+//    char videoName[50];
+//    sprintf(videoName,"~/video_%s.avi", ctime(&rawtime));
 
     cout << "Initialising video recording" << endl;
     this->writer = new VideoWriter(videoName, CV_FOURCC('M', 'J', 'P', 'G'), 15,
-            this->CurrentStateData()->Image().size(), true);
+            this->CurrentStateData()->displayImg.size(), true);
     if (!this->writer->isOpened()) {
         ROS_INFO("Writer could not be opened");
     }
