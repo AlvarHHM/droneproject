@@ -1,28 +1,28 @@
-#include "ObstacleAvoid.h"
+#include "ObstacleDetect.h"
 
-//const std::array<double,21> ObstacleAvoid::SCALE_RANGE = {1.0, 1.025, 1.05, 1.075, 1.1, 1.125, 1.15, 1.175,
+//const std::array<double,21> ObstacleDetect::SCALE_RANGE = {1.0, 1.025, 1.05, 1.075, 1.1, 1.125, 1.15, 1.175,
 //                                                         1.2, 1.225, 1.25, 1.275, 1.3, 1.325, 1.35, 1.375,
 //                                                         1.4, 1.425, 1.45, 1.475, 1.5};
-const std::array<double,ObstacleAvoid::SEARCH_RES+1> ObstacleAvoid::SCALE_RANGE = []{
-    std::array<double, ObstacleAvoid::SEARCH_RES+1> arr;
+const std::array<double, ObstacleDetect::SEARCH_RES+1> ObstacleDetect::SCALE_RANGE = []{
+    std::array<double, ObstacleDetect::SEARCH_RES+1> arr;
     for(int i = 0; i < arr.size(); ++i){
-        arr[i] = 1 + (i / (2.0 * ObstacleAvoid::SEARCH_RES));
+        arr[i] = 1 + (i / (2.0 * ObstacleDetect::SEARCH_RES));
     }
     return arr;
 }();
 
-ObstacleAvoid::~ObstacleAvoid() {
+ObstacleDetect::~ObstacleDetect() {
     delete this->bfMatcher;
     delete this->surf_ui;
 }
 
-ObstacleAvoid::ObstacleAvoid() {
+ObstacleDetect::ObstacleDetect() {
     this->bfMatcher = new BFMatcher();
     this->surf_ui = new SURF(2000, 4, 2, true, true);
 
 }
 
-void ObstacleAvoid::processFrame(Mat& frame) {
+void ObstacleDetect::processFrame(Mat& frame) {
 
     this->hasObstacle = false;
 
@@ -42,14 +42,14 @@ void ObstacleAvoid::processFrame(Mat& frame) {
             kp.class_id = this->uniqueId();
         }
     }
-    
+
     this->surf_ui->operator()(currFrame, roi, trainKP, tdesc);
 
     vector<vector<DMatch> > pre_matches;
     if (!(qdesc.total() == 0 or tdesc.total() == 0)) {
         this->bfMatcher->knnMatch(qdesc, tdesc, pre_matches, 2);
     }
-    
+
 
     vector<double> matchdist;
     vector<DMatch> matches;
@@ -97,14 +97,14 @@ void ObstacleAvoid::processFrame(Mat& frame) {
             ++i;
         }
     }
-    
-    
+
+
     vector<DMatch> scaledMatches;
     vector<double> kpscales;
     this->estimateKeypointExpansion(currFrame, lastFrame, matches, queryKP,trainKP,
                               kphist, kpscales, scaledMatches);
-    
-    
+
+
     for(int i = 0; i < scaledMatches.size(); ++i){
         DMatch m = scaledMatches[i];
         double scale = kpscales[i];
@@ -171,20 +171,14 @@ void ObstacleAvoid::processFrame(Mat& frame) {
 
         ROS_INFO("mean ttc: %.2f", this->mean_ttc);
     }
-//        drawKeypoints(currFrame, cluster, outImg, Scalar(0, 0, 255),
-//                      DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-//    line(outImg, Point(this->obstacleX , 0), Point(this->obstacleX , 100), Scalar(0, 0, 255), 5);
-//    imshow("Original", outImg);
-
 
     this->lastFrame = currFrame;
     this->t_last = t_curr;
     this->queryKP = trainKP;
     this->qdesc = tdesc;
-
 }
 
-//void ObstacleAvoid::estimateKeypointExpansion(Mat const &currFrame, Mat const &lastFrame, vector<DMatch> const &matches,
+//void ObstacleDetect::estimateKeypointExpansion(Mat const &currFrame, Mat const &lastFrame, vector<DMatch> const &matches,
 //                                              vector<KeyPoint> const &queryKPs, vector<KeyPoint> const &trainKPs,
 //                                              unordered_map<int, KeyPointHistory>  &kphist,
 //                                              vector<double>& scale_argmin, vector<DMatch>& expandingMatches ) {
@@ -256,7 +250,7 @@ void ObstacleAvoid::processFrame(Mat& frame) {
 //}
 
 
-void ObstacleAvoid::estimateKeypointExpansion(Mat const &currFrame, Mat const &lastFrame, vector<DMatch> const &matches,
+void ObstacleDetect::estimateKeypointExpansion(Mat const &currFrame, Mat const &lastFrame, vector<DMatch> const &matches,
                                               vector<KeyPoint> const &queryKPs, vector<KeyPoint> const &trainKPs,
                                               unordered_map<int, KeyPointHistory>  &kphist,
                                               vector<double>& scale_argmin, vector<DMatch>& expandingMatches ) {
@@ -332,7 +326,7 @@ void ObstacleAvoid::estimateKeypointExpansion(Mat const &currFrame, Mat const &l
 
 
 
-vector<vector<KeyPoint> > ObstacleAvoid::clusterKeyPoints(vector<KeyPoint> keypoints) {
+vector<vector<KeyPoint> > ObstacleDetect::clusterKeyPoints(vector<KeyPoint> keypoints) {
     vector<vector<KeyPoint> > clusters;
     if  (keypoints.size() < 2) return clusters;
     std::sort(keypoints.begin(), keypoints.end(),
@@ -365,13 +359,13 @@ vector<vector<KeyPoint> > ObstacleAvoid::clusterKeyPoints(vector<KeyPoint> keypo
     return clusters;
 }
 
-void ObstacleAvoid::trunc_coords(const Size& dims, const int& in_x, const int& in_y, int& out_x, int& out_y) {
+void ObstacleDetect::trunc_coords(const Size& dims, const int& in_x, const int& in_y, int& out_x, int& out_y) {
     out_x = (in_x >= 0 and in_x <= dims.width)? in_x: (in_x < 0)? 0: dims.width;
     out_y = (in_y >= 0 and in_y <= dims.height)? in_y: (in_y < 0)? 0: dims.height;
 }
 
 
-void ObstacleAvoid::init(Mat& frame) {
+void ObstacleDetect::init(Mat& frame) {
     this->lastFrame = frame;
     time(&this->t_last);
     Mat roi = Mat::zeros(frame.rows, frame.cols, CV_8UC1);
@@ -388,12 +382,12 @@ void ObstacleAvoid::init(Mat& frame) {
 }
 
 
-int ObstacleAvoid::uniqueId(void) {
+int ObstacleDetect::uniqueId(void) {
     static volatile int i = 2;
     return __sync_add_and_fetch(&i, 1);
 }
 
-void ObstacleAvoid::normalizeMAtrix(const Mat& inImg, Mat& outImg){
+void ObstacleDetect::normalizeMAtrix(const Mat& inImg, Mat& outImg){
     Mat tmp;
     inImg.convertTo(tmp, CV_32F);
     Scalar mean_scala;
@@ -405,7 +399,7 @@ void ObstacleAvoid::normalizeMAtrix(const Mat& inImg, Mat& outImg){
     outImg = (tmp - mean) / std;
 }
 
-double ObstacleAvoid::diffKP_L2(KeyPoint kp0, KeyPoint kp1){
+double ObstacleDetect::diffKP_L2(KeyPoint kp0, KeyPoint kp1){
     return sqrt(pow((kp0.pt.x - kp1.pt.x), 2) + pow((kp0.pt.y - kp1.pt.y), 2));
 }
 

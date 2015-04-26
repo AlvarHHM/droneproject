@@ -50,9 +50,20 @@ void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr &msg) {
 
     // Process the current state.
     this->currentState = this->currentState->Do(this->CurrentStateData());
-//    this->currentStateData->obstacleAvoid->processFrame(
-//            this->currentStateData->lastGray
-//    );
+//    this->currentStateData->obstacleDetect->processFrame(
+//            this->currentStateData->lastGray);
+//    if (this->CurrentStateData()->obstacleDetect->hasObstacle){
+//        drawKeypoints(this->CurrentStateData()->displayImg, this->CurrentStateData()->obstacleDetect->obstacleCluster,
+//                      this->CurrentStateData()->displayImg, Scalar(0, 0, 255),
+//                      DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+//        line(this->CurrentStateData()->displayImg, Point(this->CurrentStateData()->obstacleDetect->obstacleX , 0),
+//             Point(this->CurrentStateData()->obstacleDetect->obstacleX , 100), Scalar(0, 0, 255), 5);
+//        time_t rawtime;
+//        time (&rawtime);
+//        char buffer[50];
+//        sprintf(buffer,"./image_%s.jpg", ctime(&rawtime));
+//        imwrite( buffer, this->CurrentStateData()->displayImg );
+//    }
 
     boost::thread_group threadGroup;
 
@@ -97,15 +108,17 @@ void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr &msg) {
 void CameraImageProcess::InitialiseVideoCapture(void) {
     // TODO: Make this make a name dependent on date/time.
     // Or through the command line.
-    string videoName =  "/home/ardrone/video1.mp4";
+    string videoName =  "/home/ardrone/video1.avi";
 //    time_t rawtime;
 //    time (&rawtime);
 //    char videoName[50];
 //    sprintf(videoName,"~/video_%s.avi", ctime(&rawtime));
 
     cout << "Initialising video recording" << endl;
+//    this->writer = new VideoWriter(videoName, CV_FOURCC('M', 'J', 'P', 'G'), 15,
+//            this->CurrentStateData()->displayImg.size(), true);
     this->writer = new VideoWriter(videoName, CV_FOURCC('M', 'J', 'P', 'G'), 15,
-            this->CurrentStateData()->displayImg.size(), true);
+                                   cv::Size(640,480), true);
     if (!this->writer->isOpened()) {
         ROS_INFO("Writer could not be opened");
     }

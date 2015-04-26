@@ -4,7 +4,7 @@
 #include <opencv/cv.hpp>
 #include "Selector.h"
 #include "Flight.h"
-#include "ObstacleAvoid.h"
+#include "ObstacleDetect.h"
 
 // TLD Includes.
 #include "tld/TLD.h"
@@ -20,7 +20,7 @@ class TLD;
 class StateData {
 public:
 	// StateData class constructor.
-	StateData(tld::TLD& tld, const char* windowName, Flight& flight, ObstacleAvoid& obstacleAvoid,
+	StateData(tld::TLD& tld, const char* windowName, Flight& flight, ObstacleDetect & obstacleAvoid,
 			bool& importedModel, bool cameraOnly);
 
 	// StateData class destructor.
@@ -29,7 +29,7 @@ public:
 	// TLD object tracking data.
 	tld::TLD* tld;
 
-	ObstacleAvoid* obstacleAvoid;
+	ObstacleDetect *obstacleDetect;
 
 	// Gets the image retrieved from the drone's camera.
 	Mat& Image(void);

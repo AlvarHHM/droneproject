@@ -61,7 +61,7 @@ State* StateInitializing::Do(StateData* stateData) {
 		stateData->tld->selectObject(stateData->lastGray,
 				&stateData->Selection());
 	}
-	stateData->obstacleAvoid->init(stateData->lastGray);
+	stateData->obstacleDetect->init(stateData->lastGray);
 
 	// Call state tracking with current state data.
 	return new StateTracking();
@@ -81,19 +81,19 @@ State* StateTracking::Do(StateData* stateData) {
 	}
 //	boost::thread_group tgroup;
 //	if(true && stateData->flight->flightAllowed){
-//		tgroup.add_thread(new boost::thread(&ObstacleAvoid::processFrame, stateData->obstacleAvoid, stateData->lastGray));
+//		tgroup.add_thread(new boost::thread(&ObstacleDetect::processFrame, stateData->obstacleDetect, stateData->lastGray));
 //	}
 //	tgroup.add_thread(new boost::thread(&tld::TLD::processImage, stateData->tld, stateData->image));
 //	tgroup.join_all();
-//	stateData->tld->processImage(stateData->Image());
-	stateData->obstacleAvoid->processFrame(stateData->lastGray);
+	stateData->tld->processImage(stateData->Image());
+//	stateData->obstacleDetect->processFrame(stateData->lastGray);
 
-//	if(stateData->obstacleAvoid->hasObstacle){
-		drawKeypoints(stateData->displayImg, stateData->obstacleAvoid->obstacleCluster,
+//	if(stateData->obstacleDetect->hasObstacle){
+		drawKeypoints(stateData->displayImg, stateData->obstacleDetect->obstacleCluster,
 					  stateData->displayImg, Scalar(0, 0, 255),
                       DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-		line(stateData->displayImg, Point(stateData->obstacleAvoid->obstacleX , 0),
-			 Point(stateData->obstacleAvoid->obstacleX , 100), Scalar(0, 0, 255), 5);
+		line(stateData->displayImg, Point(stateData->obstacleDetect->obstacleX , 0),
+			 Point(stateData->obstacleDetect->obstacleX , 100), Scalar(0, 0, 255), 5);
 //	}
 
 	int confident = (stateData->tld->currConf >= 0.5) ? 1 : 0;

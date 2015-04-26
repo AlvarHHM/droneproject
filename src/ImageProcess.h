@@ -51,7 +51,7 @@ public:
 	// Processes the keyboard input.
 	void ProcessKeyInput(int input);
 
-	ObstacleAvoid* obstacleAvoid;
+	ObstacleDetect * obstacleAvoid;
 
 	// Processes the current information to send flight commands to the drone.
 	Flight* flight;

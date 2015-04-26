@@ -10,12 +10,12 @@
 #include <unordered_map>
 #include <unordered_set>
 #include "math.h"
-#include "KeyPointHistory.h"
+#include "KeyPointHistory.h"obstacleAvoid
 
 using namespace cv;
 using namespace std;
 
-class ObstacleAvoid {
+class ObstacleDetect {
 
 public:
     static const int SEARCH_RES = 20;
@@ -30,9 +30,9 @@ public:
     vector<KeyPoint> obstacleCluster;
 
 
-    virtual ~ObstacleAvoid();
+    virtual ~ObstacleDetect();
 
-    ObstacleAvoid();
+    ObstacleDetect();
 
     void processFrame(Mat &frame);
 

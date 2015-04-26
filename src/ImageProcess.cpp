@@ -17,7 +17,7 @@ ImageProcess::ImageProcess(Flight* flight, string& importModel,
 
 	this->tld = new tld::TLD();
 
-	this->obstacleAvoid = new ObstacleAvoid();
+	this->obstacleAvoid = new ObstacleDetect();
 
 	if (importModel != "") {
 		this->tld->readFromFile(importModel.c_str());
@@ -132,7 +132,7 @@ void ImageProcess::ProcessKeyInput(int input) {
 		time (&rawtime);
 		char buffer[50];
 		sprintf(buffer,"./grey_%s.jpg", ctime(&rawtime));
-		imwrite( buffer, this->CurrentStateData()->LastGray() );
+		imwrite( buffer, this->CurrentStateData()->displayImg );
 	}else if(input == 82){
 		// Pressed the arrow up button.
 		this->flight->LinearY(0);

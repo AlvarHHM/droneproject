@@ -68,7 +68,6 @@ void FrontTrackFlight::ProcessFlight(StateData& stateData) {
 	 * Y-axis: Left and right. -> Is the X-axis on the bounding box.
 	 * Z-axis: Up and down -> is the Y-axis on the bounding box.
 	 */
-
 	// Only process commands if flight is allowed.
 	if (this->flightAllowed) {
 		// Get the current estimated state's confidence.
