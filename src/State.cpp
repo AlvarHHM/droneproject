@@ -61,7 +61,6 @@ State* StateInitializing::Do(StateData* stateData) {
 		stateData->tld->selectObject(stateData->lastGray,
 				&stateData->Selection());
 	}
-	stateData->obstacleDetect->init(stateData->lastGray);
 
 	// Call state tracking with current state data.
 	return new StateTracking();

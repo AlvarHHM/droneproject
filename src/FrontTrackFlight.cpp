@@ -61,13 +61,35 @@ void FrontTrackFlight::InitialBoundingBox(Rect* boundingBox) {
 	// Pu = ~1.25
 }
 
-// Process image data to convert into flight commands.
+
+/* Process image data to convert into flight commands.
+ * Remember
+ * X-axis: Forward and backwards. -> is a combination of the height and width of the bounding box.
+ * Y-axis: Left and right. -> Is the X-axis on the bounding box.
+ * Z-axis: Up and down -> is the Y-axis on the bounding box.
+ */
 void FrontTrackFlight::ProcessFlight(StateData& stateData) {
-	/* Remember
-	 * X-axis: Forward and backwards. -> is a combination of the height and width of the bounding box.
-	 * Y-axis: Left and right. -> Is the X-axis on the bounding box.
-	 * Z-axis: Up and down -> is the Y-axis on the bounding box.
-	 */
+
+
+	stateData.obstacleDetect->processFrame(
+			stateData.lastGray);
+
+	drawKeypoints(stateData.displayImg, stateData.obstacleDetect->obstacleCluster,
+					  stateData.displayImg, Scalar(0, 0, 255),
+                      DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+	line(stateData.displayImg, Point(stateData.obstacleDetect->obstacleX , 0),
+             Point(stateData.obstacleDetect->obstacleX , 100), Scalar(0, 0, 255), 5);
+	if (stateData.obstacleDetect->hasObstacle){
+        time_t rawtime;
+        time (&rawtime);
+        char buffer[50];
+        sprintf(buffer,"./image_%s.jpg", ctime(&rawtime));
+        imwrite( buffer, stateData.displayImg );
+//		this->SetHoverValues(0,0,0,0);
+//		this->Hover();
+//		ROS_INFO("Obstacle Hover");
+    }
+
 	// Only process commands if flight is allowed.
 	if (this->flightAllowed) {
 		// Get the current estimated state's confidence.

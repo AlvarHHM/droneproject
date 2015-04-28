@@ -50,20 +50,7 @@ void CameraImageProcess::ProcessImage(const sensor_msgs::ImageConstPtr &msg) {
 
     // Process the current state.
     this->currentState = this->currentState->Do(this->CurrentStateData());
-//    this->currentStateData->obstacleDetect->processFrame(
-//            this->currentStateData->lastGray);
-//    if (this->CurrentStateData()->obstacleDetect->hasObstacle){
-//        drawKeypoints(this->CurrentStateData()->displayImg, this->CurrentStateData()->obstacleDetect->obstacleCluster,
-//                      this->CurrentStateData()->displayImg, Scalar(0, 0, 255),
-//                      DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-//        line(this->CurrentStateData()->displayImg, Point(this->CurrentStateData()->obstacleDetect->obstacleX , 0),
-//             Point(this->CurrentStateData()->obstacleDetect->obstacleX , 100), Scalar(0, 0, 255), 5);
-//        time_t rawtime;
-//        time (&rawtime);
-//        char buffer[50];
-//        sprintf(buffer,"./image_%s.jpg", ctime(&rawtime));
-//        imwrite( buffer, this->CurrentStateData()->displayImg );
-//    }
+
 
     boost::thread_group threadGroup;
 

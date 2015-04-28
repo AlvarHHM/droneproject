@@ -18,12 +18,17 @@ ObstacleDetect::~ObstacleDetect() {
 
 ObstacleDetect::ObstacleDetect() {
     this->bfMatcher = new BFMatcher();
-    this->surf_ui = new SURF(2000, 4, 2, true, true);
+    this->surf_ui = new SURF(1200, 4, 2, true, true);
+
+    Mat roi = Mat::zeros(360, 640, CV_8U);
+    int scrapY = 360 / 4;
+    int scrapX = 640 / 4;
+    roi(Rect(scrapX, scrapY, roi.cols - 2 * scrapX, roi.rows - 2 * scrapY)) = true;
+    this->roi = roi;
 
 }
 
 void ObstacleDetect::processFrame(Mat& frame) {
-
     this->hasObstacle = false;
 
     timeval time;
