@@ -42,13 +42,13 @@ void BottomTrackFlight::InitialBoundingBox(Rect* boundingBox) {
 	// Calculate the "middle point" for calculating error, which will be the bounding box height + width.
 	// TODO: Change.
 //	this->PidX = new Pid(this->middleY, 29 / 2.2, 0.02, 0.005);
-	this->PidX = new Pid(this->middleY,  4 / 2.2, 0.005, 0.00125);
-//	this->PidX = new Pid(this->middleY,  6.0, 0.005, 0.00125);
+	this->PidX = new Pid(this->middleY,  1 / 2.2, 0.005, 0.00125);
+//	this->PidX = new Pid(this->middleY,  6.0, 0.005, 0.00125);l
 
 	// X-axis on the 2D image represents the Y-axis in the 3D plane.
 	// Initialise the PID Controller for the Y-axis.
 //	this->PidY = new Pid(this->middleX, 29 / 2.2, 0.02, 0.005);
-	this->PidY = new Pid(this->middleX,  4 / 2.2, 0.005, 0.00125);
+	this->PidY = new Pid(this->middleX,  1 / 2.2, 0.005, 0.00125);
 //	this->PidX = new Pid(this->middleY,  6.0, 0.005, 0.00125);
 
 

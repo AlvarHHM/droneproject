@@ -73,7 +73,7 @@ string IntToString(T number) {
 // Sends the flight command to the drone.
 void Flight::SendFlightCommand(void) {
 	// Send the calculated movement message to the drone.
-	if(this->LinearX() + this->LinearY() + this->LinearZ() != 0) {
+	if(this->LinearX() + this->LinearY() + this->LinearZ() + this->AngularZ() != 0.0) {
 		ROS_INFO("LinearX: %.3f, LinearY: %.3f AngularZ: %.3f", this->LinearX(),
 				this->LinearY(), this->AngularZ());
 	}

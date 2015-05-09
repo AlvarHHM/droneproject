@@ -18,7 +18,7 @@ ObstacleDetect::~ObstacleDetect() {
 
 ObstacleDetect::ObstacleDetect() {
     this->bfMatcher = new BFMatcher();
-    this->surf_ui = new SURF(1200, 4, 2, true, true);
+    this->surf_ui = new SURF(2000, 4, 2, true, true);
 
     Mat roi = Mat::zeros(360, 640, CV_8U);
     int scrapY = 360 / 4;
@@ -35,6 +35,8 @@ void ObstacleDetect::processFrame(Mat& frame) {
     gettimeofday(&time, NULL);
     long t_curr = time.tv_sec * 1000 * 1000 + time.tv_usec;
     Mat& currFrame = frame;
+//    Mat dispim;
+//    frame.copyTo(dispim);
 
     vector<KeyPoint>& queryKP = this->queryKP;
     vector<KeyPoint> trainKP;
@@ -79,11 +81,11 @@ void ObstacleDetect::processFrame(Mat& frame) {
                        std::bind2nd(std::minus<double>(), mean));
         double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
         double stdev = std::sqrt(sq_sum / tmp_matchdist.size());
-        double threshdist = mean + 2 * stdev;
+        double threshdist = 2 * stdev + mean;
         auto itm = matches.begin();
         auto itd = matchdist.begin();
         for (;(itm != matches.end() && itd != matchdist.end());){
-            if (*itd < threshdist){
+            if (*itd > threshdist){
                 itm = matches.erase(itm);
                 itd = matchdist.erase(itd);
             }else{
@@ -92,6 +94,12 @@ void ObstacleDetect::processFrame(Mat& frame) {
             }
         }
     }
+
+
+
+    // Draw matches
+//    drawKeypoints(dispim, queryKP, dispim, Scalar(0, 255, 0));
+//    drawKeypoints(dispim, trainKP, dispim, Scalar(255, 0, 0));
 
 
     // discard keypoint that is getting smaller or equal
@@ -145,8 +153,7 @@ void ObstacleDetect::processFrame(Mat& frame) {
         }
     }
 
-//    Mat outImg;
-//    currFrame.copyTo(outImg);
+
     vector<KeyPoint> expandingKPs;
     for (auto&& kp : trainKP){
         if (kphist.count(kp.class_id) != 0 && kphist[kp.class_id].age == 0){
@@ -176,6 +183,8 @@ void ObstacleDetect::processFrame(Mat& frame) {
 
         ROS_INFO("mean ttc: %.2f", this->mean_ttc);
     }
+
+//    imshow("DEBUG_OBSTACLE", dispim);
 
     this->lastFrame = currFrame;
     this->t_last = t_curr;
@@ -352,7 +361,7 @@ vector<vector<KeyPoint> > ObstacleDetect::clusterKeyPoints(vector<KeyPoint> keyp
                 ++i;
             }
         }
-        if (cluster.size() >= 2){
+        if (cluster.size() >= 3){
             clusters.push_back(cluster);
         }
 
@@ -409,3 +418,12 @@ double ObstacleDetect::diffKP_L2(KeyPoint kp0, KeyPoint kp1){
 }
 
 
+void ObstacleDetect::reset() {
+    this->hasObstacle = false;
+    this->obstacleX = -1;
+    this->obstacleCluster.clear();
+    this->kphist.clear();
+    this->queryKP.clear();
+    this->qdesc = Mat();
+    this->mean_ttc = -1;
+}

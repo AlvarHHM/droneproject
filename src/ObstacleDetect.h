@@ -38,9 +38,11 @@ public:
 
     void init(Mat &frame);
 
+    void reset();
 
 
-private:
+
+//private:
     BFMatcher *bfMatcher;
     SURF *surf_ui;
 

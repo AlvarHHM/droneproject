@@ -8,8 +8,8 @@ project(droneproject)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-set(CMAKE_CXX_FLAGS "-Ofast")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "-O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 #set(CMAKE_CXX_FLAGS "-std=c++0x")
 find_package(OpenCV)
 find_package(catkin REQUIRED COMPONENTS
@@ -101,7 +101,7 @@ add_executable(DroneProject
     src/cvblobs/BlobResult.h
     src/cvblobs/ComponentLabeling.cpp
     src/cvblobs/ComponentLabeling.h
-	)
+	src/ObstacleTestFlight.cpp src/ObstacleTestFlight.h src/WanderFlight.cpp src/WanderFlight.h)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

@@ -7,13 +7,11 @@ using namespace cv;
 NavigationData::NavigationData(void) {
 
 	this->StatusWindow = "Status Window";
-	namedWindow(this->StatusWindow, WINDOW_AUTOSIZE);
+//	namedWindow(this->StatusWindow, WINDOW_AUTOSIZE);
 
 	// TODO: Make this a relative path.
-	this->statusBackground =
-			imread(
-					"/home/ardrone/ros_workspace/sandbox/drone_project/src/background.jpg",
-					CV_LOAD_IMAGE_COLOR);
+	this->statusBackground = Mat::zeros(360, 640, CV_32F);
+
 	this->statusFrame = statusBackground.clone();
 
 	if (!this->statusFrame.data) {
@@ -95,7 +93,6 @@ void NavigationData::ProcessNavigationData(
 // Shows the window.
 void NavigationData::ShowWindow() {
 	imshow(this->StatusWindow, this->statusFrame);
-	waitKey(3);
 	this->statusFrame.release();
 }
 

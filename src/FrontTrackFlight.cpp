@@ -55,7 +55,7 @@ void FrontTrackFlight::InitialBoundingBox(Rect* boundingBox) {
 	this->PidZ = new Pid(this->middleY, 0, 0, 0);
 
 	// Initialise the angular Z PID, used for calculating left and right turn.
-	this->PidAngularZ = new Pid(this->middleX, 29 / 2.2, 0.02, 0.005);
+	this->PidAngularZ = new Pid(this->middleX, 20 / 2.2, 0.002, 0.005);
 	// Ku = 29.
 
 	// Pu = ~1.25
@@ -69,26 +69,6 @@ void FrontTrackFlight::InitialBoundingBox(Rect* boundingBox) {
  * Z-axis: Up and down -> is the Y-axis on the bounding box.
  */
 void FrontTrackFlight::ProcessFlight(StateData& stateData) {
-
-
-	stateData.obstacleDetect->processFrame(
-			stateData.lastGray);
-
-	drawKeypoints(stateData.displayImg, stateData.obstacleDetect->obstacleCluster,
-					  stateData.displayImg, Scalar(0, 0, 255),
-                      DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-	line(stateData.displayImg, Point(stateData.obstacleDetect->obstacleX , 0),
-             Point(stateData.obstacleDetect->obstacleX , 100), Scalar(0, 0, 255), 5);
-	if (stateData.obstacleDetect->hasObstacle){
-        time_t rawtime;
-        time (&rawtime);
-        char buffer[50];
-        sprintf(buffer,"./image_%s.jpg", ctime(&rawtime));
-        imwrite( buffer, stateData.displayImg );
-//		this->SetHoverValues(0,0,0,0);
-//		this->Hover();
-//		ROS_INFO("Obstacle Hover");
-    }
 
 	// Only process commands if flight is allowed.
 	if (this->flightAllowed) {
