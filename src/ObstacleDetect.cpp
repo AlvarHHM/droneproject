@@ -1,8 +1,6 @@
 #include "ObstacleDetect.h"
 
-//const std::array<double,21> ObstacleDetect::SCALE_RANGE = {1.0, 1.025, 1.05, 1.075, 1.1, 1.125, 1.15, 1.175,
-//                                                         1.2, 1.225, 1.25, 1.275, 1.3, 1.325, 1.35, 1.375,
-//                                                         1.4, 1.425, 1.45, 1.475, 1.5};
+
 const std::array<double, ObstacleDetect::SEARCH_RES+1> ObstacleDetect::SCALE_RANGE = []{
     std::array<double, ObstacleDetect::SEARCH_RES+1> arr;
     for(int i = 0; i < arr.size(); ++i){

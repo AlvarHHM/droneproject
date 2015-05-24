@@ -6,9 +6,9 @@
 
 WanderFlight::WanderFlight(NodeHandle &node, NavigationData *navData) : Flight(node) {
     this->navData = navData;
-    this->PidY = new Pid(0, 2 / 2.2, 0.003, 0.0);
-    this->PidX = new Pid(150, 1 / 2.2, 0.003, 0.2);
-    this->PidZ = new Pid(750, 2 / 2.2, 0, 0);
+    this->PidY = new Pid(0, 4 / 2.2, 0.005, 0);
+    this->PidX = new Pid(200, 1 / 2.2, 0.003, 0);
+    this->PidZ = new Pid(750, 10 / 2.2, 0, 0.05);
 }
 
 void WanderFlight::ProcessFlight(StateData &stateData) {
@@ -37,36 +37,36 @@ void WanderFlight::ProcessFlight(StateData &stateData) {
                       DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
         line(stateData.displayImg, Point(stateData.obstacleDetect->obstacleX, 0),
              Point(stateData.obstacleDetect->obstacleX, 100), Scalar(0, 0, 255), 5);
-//        if (stateData.obstacleDetect->hasObstacle) {
-//            ROS_INFO("Obstacle !");
-////            imshow("Obstacle", stateData.displayImg);
-//            this->SetHoverValues(0, 0, 0, 0);
-//            this->Hover();
-////            this->LinearX(0);
-////            this->LinearY(0);
-//            ServiceClient sc = nodeHandle.serviceClient<ardrone_autonomy::FlightAnim>("ardrone/setflightanimation");
-//            ardrone_autonomy::FlightAnim animServ;
-//            animServ.request.type = 7;
-//            animServ.request.duration = 500;
-//            sc.call(animServ);
-//            ros::Duration(1).sleep();
-//            this->SetHoverValues(0, 0, 0, 0);
-//            this->Hover();
-//            stateData.obstacleDetect->reset();
-//        }else{
-//            double linearY = this->PidY->ProcessPid(this->navData->VelocityY(), timeDifference);
-//            double linearX = this->PidX->ProcessPid(this->navData->VelocityX(), timeDifference);
-//            double linearZ = this->PidZ->ProcessPid(this->navData->Altitude());
-//            this->LinearX(linearX);
-//            this->LinearY(linearY);
+        if (stateData.obstacleDetect->hasObstacle) {
+            ROS_INFO("Obstacle !");
+//            imshow("Obstacle", stateData.displayImg);
+            this->SetHoverValues(0, 0, 0, 0);
+            this->Hover();
+//            this->LinearX(0);
+//            this->LinearY(0);
+            ServiceClient sc = nodeHandle.serviceClient<ardrone_autonomy::FlightAnim>("ardrone/setflightanimation");
+            ardrone_autonomy::FlightAnim animServ;
+            animServ.request.type = 7;
+            animServ.request.duration = 500;
+            sc.call(animServ);
+            ros::Duration(1).sleep();
+            this->SetHoverValues(0, 0, 0, 0);
+            this->Hover();
+            stateData.obstacleDetect->reset();
+        }else{
+            double linearY = this->PidY->ProcessPid(this->navData->VelocityY(), timeDifference);
+            double linearX = this->PidX->ProcessPid(this->navData->VelocityX(), timeDifference);
+            double linearZ = this->PidZ->ProcessPid(this->navData->Altitude(), timeDifference);
+            this->LinearX(linearX);
+            this->LinearY(linearY);
 //            this->LinearZ(linearZ);
-//        }
-        double linearY = this->PidY->ProcessPid(this->navData->VelocityY(), timeDifference);
-        double linearX = this->PidX->ProcessPid(this->navData->VelocityX(), timeDifference);
-        double linearZ = this->PidZ->ProcessPid(this->navData->Altitude(), timeDifference);
-        this->LinearX(linearX);
-        this->LinearY(linearY);
-        this->LinearZ(linearZ);
+        }
+//        double linearY = this->PidY->ProcessPid(this->navData->VelocityY(), timeDifference);
+//        double linearX = this->PidX->ProcessPid(this->navData->VelocityX(), timeDifference);
+//        double linearZ = this->PidZ->ProcessPid(this->navData->Altitude(), timeDifference);
+//        this->LinearX(linearX);
+//        this->LinearY(linearY);
+//        this->LinearZ(linearZ);
     }else{
 
         stateData.obstacleDetect->reset();
